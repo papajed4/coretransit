@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | CoreTransit Logistics</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e3a8a',
+                        primaryDark: '#152c6b',
+                        accent: '#f97316',
+                        accentHover: '#ea580c',
+                        lightBg: '#f8fafc',
+                        darkBg: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Admin Custom Styles -->
+    <link rel="stylesheet" href="../css/premium.css">
+    <style>
+        .admin-sidebar {
+            background: linear-gradient(180deg, #1e3a8a 0%, #152c6b 100%);
+        }
+
+        .admin-card {
+            transition: all 0.3s ease;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(30, 58, 138, 0.2);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-transit {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-outfordelivery {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Mobile Sidebar Styles */
+        @media (max-width: 768px) {
+            .sidebar-collapsed {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-expanded {
+                transform: translateX(0);
+            }
+
+            .admin-sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 50;
+                transition: transform 0.3s ease;
+                width: 256px;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-lightBg antialiased">
+
+    <!-- ========================================== -->
+    <!-- PASSWORD PROTECTION                        -->
+    <!-- ========================================== -->
+    <script>
+        const ADMIN_PASSWORD = "papajed4";
+
+        if (sessionStorage.getItem('admin_auth') !== 'true') {
+            const userPass = prompt("🔐 Enter admin password to access dashboard:");
+
+            if (userPass === null) {
+                window.location.href = "../index.html";
+            } else if (userPass !== ADMIN_PASSWORD) {
+                alert("❌ Access denied. Incorrect password.");
+                window.location.href = "../index.html";
+            } else {
+                sessionStorage.setItem('admin_auth', 'true');
+                alert("✅ Access granted! Welcome to CoreTransit Admin.");
+            }
+        }
+
+        function logoutAdmin() {
+            if (confirm("Are you sure you want to logout?")) {
+                sessionStorage.removeItem('admin_auth');
+                window.location.href = "../index.html";
+            }
+        }
+        window.logoutAdmin = logoutAdmin;
+    </script>
+
+    <!-- ========================================== -->
+    <!-- ADMIN LAYOUT                               -->
+    <!-- ========================================== -->
+    <div class="flex h-screen relative">
+
+        <!-- Mobile Menu Overlay -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden" onclick="toggleSidebar()">
+        </div>
+
+        <!-- Sidebar -->
+        <aside id="admin-sidebar"
+            class="admin-sidebar w-64 text-white flex flex-col fixed md:relative z-50 h-screen sidebar-collapsed md:sidebar-expanded md:translate-x-0">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-earth-americas text-sm"></i>
+                        </div>
+                        <span class="font-bold text-xl">CoreTransit</span>
+                    </div>
+                    <p class="text-white/60 text-xs mt-2">Admin Dashboard</p>
+                </div>
+                <!-- Close sidebar button (mobile only) -->
+                <button onclick="toggleSidebar()" class="md:hidden text-white/70 hover:text-white">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <nav class="flex-1 p-4 overflow-y-auto">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-medium">
+                            <i class="fa-solid fa-box w-5"></i>
+                            <span>Shipments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition">
+                            <i class="fa-solid fa-chart-line w-5"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition">
+                            <i class="fa-solid fa-users w-5"></i>
+                            <span>Customers</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition">
+                            <i class="fa-solid fa-gear w-5"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+
+                    <!-- Logout Button -->
+                    <li class="pt-4 mt-4 border-t border-white/10">
+                        <a href="#" onclick="logoutAdmin(); return false;"
+                            class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-red-500/20 hover:text-red-300 transition">
+                            <i class="fa-solid fa-sign-out-alt w-5"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="p-4 border-t border-white/10">
+                <a href="../index.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition">
+                    <i class="fa-solid fa-arrow-left w-5"></i>
+                    <span>Back to Site</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto w-full md:ml-0">
+
+            <!-- Mobile Header with Menu Button -->
+            <header class="bg-white border-b border-gray-200 px-4 md:px-8 py-4 sticky top-0 z-30">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <!-- Mobile Menu Toggle Button -->
+                        <button onclick="toggleSidebar()" class="md:hidden text-primary hover:text-accent transition">
+                            <i class="fa-solid fa-bars text-2xl"></i>
+                        </button>
+                        <div>
+                            <h1 class="text-xl md:text-2xl font-bold text-primary">Shipment Management</h1>
+                            <p class="text-gray-500 text-xs md:text-sm">Create, update, and manage all shipments</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <span class="text-sm text-gray-600 hidden md:block">
+                            <i class="fa-regular fa-bell mr-2"></i>
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-8 h-8 md:w-10 md:h-10 bg-accent/10 rounded-full flex items-center justify-center text-accent font-bold">
+                                A
+                            </div>
+                            <span class="text-sm font-medium hidden md:block">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="p-4 md:p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+                    <div class="admin-card bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-2 md:mb-4">
+                            <div
+                                class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
+                                <i class="fa-solid fa-box text-sm md:text-base"></i>
+                            </div>
+                            <span class="text-xl md:text-2xl font-bold text-gray-800" id="total-shipments">0</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs md:text-sm font-medium">Total Shipments</h3>
+                    </div>
+                    <div class="admin-card bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-2 md:mb-4">
+                            <div
+                                class="w-10 h-10 md:w-12 md:h-12 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600">
+                                <i class="fa-solid fa-truck-fast text-sm md:text-base"></i>
+                            </div>
+                            <span class="text-xl md:text-2xl font-bold text-gray-800" id="in-transit-count">0</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs md:text-sm font-medium">In Transit</h3>
+                    </div>
+                    <div class="admin-card bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-2 md:mb-4">
+                            <div
+                                class="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600">
+                                <i class="fa-solid fa-circle-check text-sm md:text-base"></i>
+                            </div>
+                            <span class="text-xl md:text-2xl font-bold text-gray-800" id="delivered-count">0</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs md:text-sm font-medium">Delivered</h3>
+                    </div>
+                    <div class="admin-card bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-2 md:mb-4">
+                            <div
+                                class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600">
+                                <i class="fa-solid fa-clock text-sm md:text-base"></i>
+                            </div>
+                            <span class="text-xl md:text-2xl font-bold text-gray-800" id="pending-count">0</span>
+                        </div>
+                        <h3 class="text-gray-500 text-xs md:text-sm font-medium">Pending</h3>
+                    </div>
+                </div>
+
+                <!-- Create Shipment Form -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-6 md:mb-8">
+                    <h2 class="text-base md:text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-accent"></i>
+                        Create New Shipment
+                    </h2>
+
+                    <form id="create-shipment-form"
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4">
+                        <input type="text" id="new-tracking-id" placeholder="Tracking ID" required
+                            class="premium-input px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition uppercase text-sm">
+                        <input type="text" id="new-sender" placeholder="Sender Name" required
+                            class="premium-input px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition text-sm">
+                        <input type="text" id="new-receiver" placeholder="Receiver Name" required
+                            class="premium-input px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition text-sm">
+                        <select id="new-status" required
+                            class="premium-input px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition bg-white text-sm">
+                            <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Out for Delivery">Out for Delivery</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                        <input type="text" id="new-location" placeholder="Location" required
+                            class="premium-input px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition text-sm">
+                        <button type="submit"
+                            class="bg-gradient-to-r from-accent to-accentHover text-white px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold hover:shadow-lg transition text-sm md:text-base">
+                            <i class="fa-solid fa-plus mr-2"></i>Create
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Shipments Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-4 md:px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                        <h2 class="font-bold text-primary text-base md:text-lg">All Shipments</h2>
+                        <button onclick="loadShipments()"
+                            class="text-accent hover:text-accentHover transition text-sm md:text-base">
+                            <i class="fa-solid fa-rotate mr-2"></i>Refresh
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-[900px] md:min-w-full">
+                            <thead class="bg-gray-50 border-b border-gray-100">
+                                <tr>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Tracking ID</th>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Sender</th>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Receiver</th>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Location</th>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Updated</th>
+                                    <th
+                                        class="px-3 md:px-6 py-3 md:py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shipments-table-body" class="divide-y divide-gray-100">
+                                <tr>
+                                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                        <div class="loader mx-auto mb-4"></div>
+                                        Loading shipments...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- EDIT SHIPMENT MODAL                        -->
+    <!-- ========================================== -->
+    <div id="edit-modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeEditModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-md">
+            <div class="bg-white rounded-3xl p-6 shadow-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-primary">Edit Shipment</h3>
+                    <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="edit-shipment-form" class="space-y-4">
+                    <input type="hidden" id="edit-id">
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Tracking ID</label>
+                        <input type="text" id="edit-tracking-id" required
+                            class="premium-input w-full px-4 py-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent uppercase">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Sender</label>
+                        <input type="text" id="edit-sender" required
+                            class="premium-input w-full px-4 py-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Receiver</label>
+                        <input type="text" id="edit-receiver" required
+                            class="premium-input w-full px-4 py-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Status</label>
+                        <select id="edit-status" required
+                            class="premium-input w-full px-4 py-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent bg-white">
+                            <option value="Pending">Pending</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Out for Delivery">Out for Delivery</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Location</label>
+                        <input type="text" id="edit-location" required
+                            class="premium-input w-full px-4 py-2 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent">
+                    </div>
+
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-accent to-accentHover text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                            Save Changes
+                        </button>
+                        <button type="button" onclick="closeEditModal()"
+                            class="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+
+    <!-- Mobile Sidebar Toggle Script -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            sidebar.classList.toggle('sidebar-collapsed');
+            sidebar.classList.toggle('sidebar-expanded');
+            overlay.classList.toggle('hidden');
+        }
+
+        // Close sidebar when window resizes to desktop
+        window.addEventListener('resize', function () {
+            if (window.innerWidth >= 768) {
+                const sidebar = document.getElementById('admin-sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                sidebar.classList.remove('sidebar-collapsed');
+                sidebar.classList.add('sidebar-expanded');
+                overlay.classList.add('hidden');
+            } else {
+                const sidebar = document.getElementById('admin-sidebar');
+                sidebar.classList.add('sidebar-collapsed');
+                sidebar.classList.remove('sidebar-expanded');
+            }
+        });
+
+        // Initialize sidebar state on load
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('admin-sidebar');
+                sidebar.classList.add('sidebar-collapsed');
+                sidebar.classList.remove('sidebar-expanded');
+            }
+        });
+    </script>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+
+</html>
