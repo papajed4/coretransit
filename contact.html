@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Contact Us | CoreTransit Logistics</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e3a8a',
+                        primaryDark: '#152c6b',
+                        accent: '#f97316',
+                        accentHover: '#ea580c',
+                        lightBg: '#f8fafc',
+                        darkBg: '#0f172a',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Premium CSS -->
+    <link rel="stylesheet" href="css/premium.css">
+</head>
+
+<body class="font-sans text-gray-800 bg-white antialiased">
+
+    <!-- ========================================== -->
+    <!-- PREMIUM NAVIGATION                         -->
+    <!-- ========================================== -->
+    <nav class="fixed w-full z-50 transition-all duration-500 bg-white/95 backdrop-blur-md shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="index.html" class="flex-shrink-0 flex items-center group">
+                    <div class="relative">
+                        <div
+                            class="absolute inset-0 bg-accent rounded-full blur-lg opacity-50 group-hover:opacity-75 transition">
+                        </div>
+                        <div
+                            class="relative w-10 h-10 bg-gradient-to-br from-accent to-accentHover rounded-full flex items-center justify-center text-white shadow-lg">
+                            <i class="fa-solid fa-earth-americas text-xl"></i>
+                        </div>
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight ml-3 text-primary">Core<span
+                            class="text-accent">Transit</span></span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-1 items-center">
+                    <a href="index.html"
+                        class="nav-link px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">Home</a>
+                    <a href="about.html"
+                        class="nav-link px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">About</a>
+                    <a href="services.html"
+                        class="nav-link px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">Services</a>
+                    <a href="contact.html"
+                        class="nav-link px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 text-accent font-bold">Contact</a>
+                </div>
+
+                <!-- Track Button -->
+                <div class="hidden md:flex items-center gap-3">
+                    <a href="track.html"
+                        class="btn-premium relative bg-gradient-to-r from-accent to-accentHover text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-accent/25 flex items-center gap-2">
+                        <span>Track Shipment</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn"
+                        class="text-2xl focus:outline-none transition-colors duration-300 p-2 text-primary">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu"
+            class="hidden md:hidden glass-dark mx-4 rounded-2xl mt-2 p-4 shadow-2xl border border-white/10">
+            <a href="index.html"
+                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">Home</a>
+            <a href="about.html"
+                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">About</a>
+            <a href="services.html"
+                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">Services</a>
+            <a href="contact.html"
+                class="block py-3 px-4 text-white font-medium rounded-lg bg-white/10 transition">Contact</a>
+            <a href="track.html"
+                class="w-full mt-3 bg-gradient-to-r from-accent to-accentHover text-white px-6 py-3 rounded-full font-semibold transition block text-center">
+                Track Shipment
+            </a>
+        </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- CONTACT PAGE CONTENT                       -->
+    <!-- ========================================== -->
+    <div class="min-h-screen bg-white pt-24 md:pt-32 pb-12 md:pb-20">
+        <div class="max-w-7xl mx-auto px-4">
+
+            <!-- Hero Section -->
+            <div class="text-center mb-10 md:mb-16">
+                <div class="inline-flex items-center glass-premium rounded-full px-4 py-2 md:px-5 md:py-2 mb-4 md:mb-6 border border-gray-200 shadow-lg"
+                    data-aos="fade-down">
+                    <i class="fa-solid fa-headset text-accent mr-2 text-sm"></i>
+                    <span class="text-primary font-semibold text-xs md:text-sm uppercase tracking-wider">Get In
+                        Touch</span>
+                </div>
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-4 md:mb-6"
+                    data-aos="fade-up">Let's <span class="gradient-text">Connect</span></h1>
+                <p class="text-base md:text-xl text-gray-600 max-w-3xl mx-auto px-4" data-aos="fade-up"
+                    data-aos-delay="100">
+                    Whether you need a quote, have a tracking inquiry, or want to discuss a complex supply chain
+                    solution,
+                    our team is ready to help.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16">
+
+                <!-- Contact Information -->
+                <div data-aos="fade-right">
+                    <h2 class="text-xl md:text-2xl font-bold text-primary mb-6 md:mb-8">Contact Information</h2>
+
+                    <div class="space-y-6 md:space-y-8">
+                        <!-- Global HQ -->
+                        <div class="flex items-start gap-4 md:gap-5 group">
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl md:rounded-2xl flex items-center justify-center text-accent text-lg md:text-xl shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-base md:text-lg mb-1">Global Headquarters</h4>
+                                <p class="text-gray-600 text-sm md:text-base">120 Logistics Way, Suite 400<br>New York,
+                                    NY 10001, USA</p>
+                                <a href="#"
+                                    class="text-accent text-xs md:text-sm font-medium hover:underline mt-2 inline-block">Get
+                                    Directions →</a>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="flex items-start gap-4 md:gap-5 group">
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl md:rounded-2xl flex items-center justify-center text-accent text-lg md:text-xl shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-base md:text-lg mb-1">Phone Support</h4>
+                                <p class="text-gray-600 text-sm md:text-base">+1 (800) 555-CORE</p>
+                                <p class="text-gray-600 text-sm md:text-base">+1 (212) 555-0192</p>
+                                <p class="text-xs md:text-sm text-accent mt-1"><i
+                                        class="fa-regular fa-clock mr-1"></i>Available 24/7</p>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="flex items-start gap-4 md:gap-5 group">
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl md:rounded-2xl flex items-center justify-center text-accent text-lg md:text-xl shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-base md:text-lg mb-1">Email Us</h4>
+                                <p class="text-gray-600 text-sm md:text-base">support@coretransit.com</p>
+                                <p class="text-gray-600 text-sm md:text-base">sales@coretransit.com</p>
+                                <p class="text-xs md:text-sm text-gray-500 mt-1">Response within 2 hours</p>
+                            </div>
+                        </div>
+
+                        <!-- Regional Offices -->
+                        <div class="flex items-start gap-4 md:gap-5 group">
+                            <div
+                                class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl md:rounded-2xl flex items-center justify-center text-accent text-lg md:text-xl shrink-0 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-globe"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-base md:text-lg mb-3">Regional Offices</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <p class="font-semibold text-gray-800 text-xs md:text-sm">Europe</p>
+                                        <p class="text-gray-600 text-xs md:text-sm">Rotterdam, Netherlands</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-800 text-xs md:text-sm">Asia Pacific</p>
+                                        <p class="text-gray-600 text-xs md:text-sm">Singapore, Singapore</p>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-800 text-xs md:text-sm">Middle East</p>
+                                        <p class="text-gray-600 text-xs md:text-sm">Dubai, UAE</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="mt-8 md:mt-10 pt-6 md:pt-8 border-t border-gray-100">
+                        <h4 class="font-bold text-gray-900 text-base md:text-lg mb-4">Follow Us</h4>
+                        <div class="flex gap-3">
+                            <a href="#"
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div data-aos="fade-left">
+                    <div
+                        class="bg-gradient-to-br from-lightBg to-white p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border border-gray-100 shadow-xl">
+                        <h2 class="text-xl md:text-2xl font-bold text-primary mb-5 md:mb-6">Send Us a Message</h2>
+
+                        <form id="contact-form" class="space-y-4 md:space-y-6">
+                            <div class="grid grid-cols-2 gap-3 md:gap-4">
+                                <div>
+                                    <label class="block text-xs md:text-sm font-bold text-gray-700 mb-1 md:mb-2">First
+                                        Name *</label>
+                                    <input type="text" name="firstName" required
+                                        class="premium-input w-full px-3 md:px-4 py-2.5 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent transition text-sm md:text-base">
+                                </div>
+                                <div>
+                                    <label class="block text-xs md:text-sm font-bold text-gray-700 mb-1 md:mb-2">Last
+                                        Name *</label>
+                                    <input type="text" name="lastName" required
+                                        class="premium-input w-full px-3 md:px-4 py-2.5 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent transition text-sm md:text-base">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold text-gray-700 mb-1 md:mb-2">Email
+                                    Address *</label>
+                                <input type="email" name="email" required
+                                    class="premium-input w-full px-3 md:px-4 py-2.5 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent transition text-sm md:text-base">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold text-gray-700 mb-1 md:mb-2">Phone
+                                    Number</label>
+                                <input type="tel" name="phone"
+                                    class="premium-input w-full px-3 md:px-4 py-2.5 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent transition text-sm md:text-base">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold text-gray-700 mb-1 md:mb-2">Subject
+                                    *</label>
+                                <select name="subject" required
+                                    class="premium-input w-full px-3 md:px-4 py-2.5 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent transition bg-white text-sm md:text-base">
+                                    <option value="">Select a subject</option>
+                                    <option value="quote">Request a Quote</option>
+                                    <option value="tracking">Tracking Inquiry</option>
+                                    <option value="support">Customer Support</option>
+                                    <option value="partnership">Partnership Opportunity</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs md:text-sm font-bold text-gray-700 mb-1 md:mb-2">Message
+                                    *</label>
+                                <textarea name="message" rows="4" required
+                                    class="premium-input w-full px-3 md:px-4 py-2.5 md:py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-4 focus:ring-accent/20 focus:border-accent transition resize-none text-sm md:text-base"
+                                    placeholder="Tell us how we can help you..."></textarea>
+                            </div>
+
+                            <div class="flex items-start gap-2 md:gap-3">
+                                <input type="checkbox" id="privacy" name="privacy" required class="mt-1">
+                                <label for="privacy" class="text-xs md:text-sm text-gray-600">
+                                    I agree to the <a href="#" class="text-accent hover:underline">Privacy Policy</a>
+                                    and
+                                    consent to being contacted regarding my inquiry.
+                                </label>
+                            </div>
+
+                            <button type="submit"
+                                class="btn-premium relative w-full bg-gradient-to-r from-primary to-primaryDark hover:from-primaryDark hover:to-primary text-white font-bold py-3 md:py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-sm md:text-base">
+                                <span>Send Message</span>
+                                <i class="fa-solid fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+
+                        <!-- Success Message -->
+                        <div id="form-success"
+                            class="hidden mt-5 md:mt-6 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 flex items-center gap-3">
+                            <i class="fa-solid fa-check-circle text-lg md:text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-sm md:text-base">Message Sent Successfully!</h4>
+                                <p class="text-xs md:text-sm">We'll get back to you within 2 business hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="mt-12 md:mt-20" data-aos="fade-up">
+                <div class="bg-lightBg rounded-2xl md:rounded-3xl p-5 md:p-8">
+                    <h3 class="text-lg md:text-xl font-bold text-primary mb-4 md:mb-6 text-center">Our Global Presence
+                    </h3>
+                    <div class="aspect-video bg-gray-200 rounded-xl md:rounded-2xl overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074" alt="World Map"
+                            class="w-full h-full object-cover opacity-60">
+                        <div class="absolute inset-0 flex items-center justify-center px-4">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3 md:p-4 shadow-lg">
+                                <p class="text-primary font-semibold text-xs md:text-base"><i
+                                        class="fa-solid fa-location-dot text-accent mr-2"></i>50+ Global Hubs Across 6
+                                    Continents</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Quick Links -->
+            <div class="mt-10 md:mt-16 text-center" data-aos="fade-up">
+                <h3 class="text-lg md:text-xl font-bold text-primary mb-4 md:mb-6">Frequently Asked Questions</h3>
+                <div class="flex flex-wrap gap-3 md:gap-4 justify-center">
+                    <a href="#" class="text-gray-600 hover:text-accent transition text-xs md:text-sm">Shipping Rates</a>
+                    <span class="text-gray-300 hidden sm:inline">|</span>
+                    <a href="#" class="text-gray-600 hover:text-accent transition text-xs md:text-sm">Transit Times</a>
+                    <span class="text-gray-300 hidden sm:inline">|</span>
+                    <a href="#" class="text-gray-600 hover:text-accent transition text-xs md:text-sm">Prohibited
+                        Items</a>
+                    <span class="text-gray-300 hidden sm:inline">|</span>
+                    <a href="#" class="text-gray-600 hover:text-accent transition text-xs md:text-sm">Claims Process</a>
+                    <span class="text-gray-300 hidden sm:inline">|</span>
+                    <a href="#" class="text-gray-600 hover:text-accent transition text-xs md:text-sm">Account Setup</a>
+                </div>
+            </div>
+
+            <!-- Emergency Support -->
+            <div class="mt-8 md:mt-12 p-5 md:p-6 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl md:rounded-2xl border border-orange-200"
+                data-aos="fade-up">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div class="flex items-center gap-3 md:gap-4">
+                        <div
+                            class="w-10 h-10 md:w-12 md:h-12 bg-accent rounded-full flex items-center justify-center text-white shrink-0">
+                            <i class="fa-solid fa-phone-volume"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 text-base md:text-lg">Emergency Support</h4>
+                            <p class="text-xs md:text-sm text-gray-600">For urgent shipment issues, call our 24/7
+                                hotline</p>
+                        </div>
+                    </div>
+                    <div class="text-xl md:text-2xl font-bold text-accent">+1 (800) 555-CORE</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PREMIUM FOOTER                             -->
+    <!-- ========================================== -->
+    <footer class="bg-darkBg text-gray-300 py-12 md:py-20 border-t-4 border-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Top Footer / CTA -->
+            <div
+                class="flex flex-col lg:flex-row justify-between items-center mb-12 md:mb-20 pb-8 md:pb-12 border-b border-gray-800">
+                <h2
+                    class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6 lg:mb-0 max-w-2xl leading-tight text-center lg:text-left">
+                    Ready to Ship With <span class="gradient-text">CoreTransit?</span>
+                </h2>
+                <a href="contact.html"
+                    class="btn-premium relative bg-gradient-to-r from-accent to-accentHover text-white px-6 md:px-10 py-3 md:py-5 rounded-full font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-accent/25 flex items-center gap-3 md:gap-4 text-base md:text-lg">
+                    <span>Get Started Now</span>
+                    <i class="fa-solid fa-arrow-right bg-white/20 p-2 rounded-full"></i>
+                </a>
+            </div>
+
+            <!-- Newsletter Section -->
+            <div class="mb-12 md:mb-16 p-6 md:p-8 bg-gray-800/50 rounded-2xl md:rounded-3xl border border-gray-700">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+                    <div class="text-center md:text-left">
+                        <h3 class="text-xl md:text-2xl font-bold text-white mb-2">Subscribe to Our Newsletter</h3>
+                        <p class="text-gray-400 text-sm md:text-base">Get the latest logistics insights and updates
+                            delivered to your inbox.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <input type="email" placeholder="Enter your email"
+                            class="newsletter-input flex-grow px-4 md:px-6 py-3 md:py-4 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm md:text-base">
+                        <button
+                            class="bg-accent hover:bg-accentHover text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold transition text-sm md:text-base">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Footer Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12">
+                <div class="lg:col-span-2 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start mb-4 md:mb-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-accent rounded-full blur-lg opacity-50"></div>
+                            <div
+                                class="relative w-10 h-10 bg-gradient-to-br from-accent to-accentHover rounded-full flex items-center justify-center text-white shadow-lg">
+                                <i class="fa-solid fa-earth-americas"></i>
+                            </div>
+                        </div>
+                        <span class="font-bold text-2xl text-white ml-3">Core<span
+                                class="text-accent">Transit</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6 md:mb-8">
+                        World-class global logistics solutions. Moving what matters across air, ocean, and land with
+                        precision and reliability.
+                    </p>
+                    <div class="flex space-x-3 justify-center md:justify-start">
+                        <a href="#"
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110"><i
+                                class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110"><i
+                                class="fa-brands fa-twitter"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gray-800 flex items-center justify-center hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110"><i
+                                class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h4 class="text-white font-bold mb-4 md:mb-6 uppercase tracking-wider text-sm">Company</h4>
+                    <ul class="space-y-3 md:space-y-4">
+                        <li><a href="about.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>About Us</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Careers</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>News & Media</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Sustainability</a></li>
+                    </ul>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h4 class="text-white font-bold mb-4 md:mb-6 uppercase tracking-wider text-sm">Services</h4>
+                    <ul class="space-y-3 md:space-y-4">
+                        <li><a href="services.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Air Freight</a></li>
+                        <li><a href="services.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Ocean Freight</a></li>
+                        <li><a href="services.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Contract Logistics</a>
+                        </li>
+                        <li><a href="services.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Customs Brokerage</a></li>
+                    </ul>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h4 class="text-white font-bold mb-4 md:mb-6 uppercase tracking-wider text-sm">Support</h4>
+                    <ul class="space-y-3 md:space-y-4">
+                        <li><a href="track.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Track Shipment</a></li>
+                        <li><a href="contact.html"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Contact Support</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>FAQ</a></li>
+                        <li><a href="#"
+                                class="text-gray-400 hover:text-accent transition flex items-center justify-center md:justify-start gap-2"><i
+                                    class="fa-solid fa-chevron-right text-xs text-accent"></i>Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="mt-12 md:mt-20 pt-6 md:pt-8 border-t border-gray-800 text-center text-xs md:text-sm text-gray-500">
+                <p>&copy; 2026 CoreTransit Logistics. All rights reserved. | <a href="#"
+                        class="hover:text-accent transition">Privacy Policy</a> | <a href="#"
+                        class="hover:text-accent transition">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top"
+        class="back-to-top fixed bottom-6 right-6 md:bottom-8 md:right-8 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-accent to-accentHover text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center text-lg md:text-xl z-40 border-2 border-white/30">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('hidden');
+                document.body.classList.toggle('mobile-menu-open');
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!mobileMenu.classList.contains('hidden') &&
+                    !mobileMenu.contains(e.target) &&
+                    !menuBtn.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                    document.body.classList.remove('mobile-menu-open');
+                }
+            });
+        }
+
+        // Back to Top Button
+        const backToTopBtn = document.getElementById('back-to-top');
+        if (backToTopBtn) {
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 500) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Contact Form Handling
+        const contactForm = document.getElementById('contact-form');
+        const successMessage = document.getElementById('form-success');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Get form data
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+
+                // Show loading state
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span>Sending...</span><div class="loader ml-2"></div>';
+                submitBtn.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    // Show success message
+                    if (successMessage) {
+                        successMessage.classList.remove('hidden');
+                    }
+
+                    // Reset form
+                    contactForm.reset();
+
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+
+                    // Log for development
+                    console.log('Contact form submitted:', data);
+
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        if (successMessage) {
+                            successMessage.classList.add('hidden');
+                        }
+                    }, 5000);
+                }, 1500);
+            });
+        }
+
+        // Refresh AOS on load
+        window.addEventListener('load', function () {
+            AOS.refresh();
+        });
+    </script>
+
+</body>
+
+</html>
