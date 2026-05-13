@@ -1,377 +1,451 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Track Shipment | CoreTransit Logistics</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts + Tailwind + AOS + FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-
-    <!-- Icons (FontAwesome) -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- AOS Animation Library -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
+                    colors: {
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary-fixed": "#00164e",
+                        "surface-tint": "#4059aa",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "background": "#f8f9ff",
+                        "tertiary": "#002e44",
+                        "surface-container": "#e5eeff",
+                        "inverse-primary": "#b6c4ff",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "on-error": "#ffffff",
+                        "primary": "#00236f",
+                        "outline": "#757682",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-tertiary-container": "#36b6fb",
+                        "on-primary": "#ffffff",
+                        "secondary": "#9d4300",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-container": "#004565",
+                        "on-surface-variant": "#444651",
+                        "on-background": "#0b1c30",
+                        "outline-variant": "#c5c5d3",
+                        "on-secondary-container": "#5c2400",
+                        "on-secondary-fixed": "#341100",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "secondary-container": "#fd761a",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "secondary-fixed-dim": "#ffb690",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#264191",
+                        "primary-fixed": "#dce1ff",
+                        "primary-container": "#1e3a8a",
+                        "tertiary-fixed": "#c9e6ff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#90a8ff",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface": "#f8f9ff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#783200",
+                        "secondary-fixed": "#ffdbca"
+                    },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#1e3a8a',
-                        primaryDark: '#152c6b',
-                        accent: '#f97316',
-                        accentHover: '#ea580c',
-                        lightBg: '#f8fafc',
-                        darkBg: '#0f172a',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'shimmer': 'shimmer 2s linear infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        },
-                        shimmer: {
-                            '0%': { backgroundPosition: '-200% 0' },
-                            '100%': { backgroundPosition: '200% 0' },
-                        },
                     },
                 }
             }
         }
     </script>
 
-    <!-- Custom Premium CSS -->
-    <link rel="stylesheet" href="css/premium.css">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .back-to-top {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .back-to-top {
+                bottom: 16px !important;
+                right: 16px !important;
+                width: 48px !important;
+                height: 48px !important;
+            }
+        }
+
+        #mobile-menu {
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-open {
+            overflow: hidden;
+        }
+
+        .timeline-step {
+            position: relative;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-step.completed .step-icon {
+            background: #9d4300;
+            border-color: #9d4300;
+            color: white;
+        }
+
+        .timeline-step.active .step-icon {
+            background: white;
+            border-color: #9d4300;
+            color: #9d4300;
+            box-shadow: 0 0 0 4px rgba(157, 67, 0, 0.2);
+        }
+    </style>
 </head>
 
-<body class="font-sans text-gray-800 bg-gradient-to-b from-lightBg to-white antialiased">
+<body class="bg-background text-on-background font-sans overflow-x-hidden">
 
     <!-- ========================================== -->
-    <!-- PREMIUM NAVIGATION (TRACKING PAGE)         -->
+    <!-- PREMIUM NAVIGATION (with mobile menu)      -->
     <!-- ========================================== -->
-    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-lg" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="index.html" class="flex-shrink-0 flex items-center group">
-                    <div class="relative">
-                        <div
-                            class="absolute inset-0 bg-accent rounded-full blur-lg opacity-50 group-hover:opacity-75 transition">
-                        </div>
-                        <div
-                            class="relative w-10 h-10 bg-gradient-to-br from-accent to-accentHover rounded-full flex items-center justify-center text-white shadow-lg">
-                            <i class="fa-solid fa-earth-americas text-xl"></i>
-                        </div>
-                    </div>
-                    <span class="font-bold text-2xl tracking-tight ml-3 text-primary">Core<span
-                            class="text-accent">Transit</span></span>
-                </a>
-
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-1 items-center">
-                    <a href="index.html"
-                        class="px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">Home</a>
-                    <a href="index.html#about"
-                        class="px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">About</a>
-                    <a href="index.html#services"
-                        class="px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">Services</a>
-                    <a href="index.html#contact"
-                        class="px-5 py-2 rounded-full text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-accent/10">Contact</a>
-                </div>
-
-                <!-- Track Button (Active) -->
-                <div class="hidden md:flex items-center gap-3">
-                    <span class="relative">
-                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
-                        </span>
-                        <span
-                            class="bg-gradient-to-r from-accent to-accentHover text-white px-6 py-2.5 rounded-full font-semibold shadow-lg flex items-center gap-2">
-                            <span>Track Shipment</span>
-                            <i class="fa-solid fa-location-dot"></i>
-                        </span>
-                    </span>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn"
-                        class="text-2xl focus:outline-none transition-colors duration-300 p-2 text-primary">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                </div>
+    <header
+        class="fixed w-full z-50 bg-white/60 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-500"
+        id="navbar">
+        <nav class="flex justify-between items-center px-4 md:px-8 py-4 max-w-7xl mx-auto">
+            <div class="text-2xl font-bold text-primary dark:text-on-primary-container">
+                Core<span class="text-secondary">Transit</span>
             </div>
-        </div>
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu"
-            class="hidden md:hidden glass-dark mx-4 rounded-2xl mt-2 p-4 shadow-2xl border border-white/10">
+            <div class="hidden md:flex items-center gap-8">
+                <a href="index.html"
+                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Home</a>
+                <a href="about.html"
+                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">About</a>
+                <a href="services.html"
+                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Services</a>
+                <a href="contact.html"
+                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Contact</a>
+            </div>
+            <div class="hidden md:flex items-center gap-3">
+                <span class="relative">
+                    <span class="absolute -top-1 -right-1 flex h-3 w-3"><span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span><span
+                            class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span></span>
+                    <span
+                        class="bg-secondary text-white px-6 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 shadow-md">Track
+                        Shipment <span class="material-symbols-outlined text-[18px]">location_on</span></span>
+                </span>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-primary text-2xl focus:outline-none"><i
+                    class="fa-solid fa-bars"></i></button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 rounded-2xl mt-2 p-4 shadow-xl">
             <a href="index.html"
-                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">Home</a>
-            <a href="index.html#about"
-                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">About</a>
-            <a href="index.html#services"
-                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">Services</a>
-            <a href="index.html#contact"
-                class="block py-3 px-4 text-white font-medium rounded-lg hover:bg-white/10 transition">Contact</a>
+                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Home</a>
+            <a href="about.html"
+                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">About</a>
+            <a href="services.html"
+                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Services</a>
+            <a href="contact.html"
+                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Contact</a>
         </div>
-    </nav>
+    </header>
 
     <!-- ========================================== -->
-    <!-- TRACKING PAGE CONTENT                      -->
+    <!-- TRACKING HERO                              -->
     <!-- ========================================== -->
-    <div class="min-h-screen pt-28 pb-20">
-        <div class="max-w-4xl mx-auto px-4">
-
-            <!-- Header -->
-            <div class="text-center mb-12" data-aos="fade-down">
-                <div
-                    class="inline-flex items-center glass-premium rounded-full px-5 py-2 mb-6 border border-white/30 shadow-lg">
-                    <i class="fa-solid fa-satellite-dish text-accent mr-2"></i>
-                    <span class="text-primary font-semibold text-sm uppercase tracking-wider">Real-Time Tracking</span>
-                </div>
-                <h1 class="text-5xl md:text-6xl font-extrabold text-primary mb-4">Track Your <span
-                        class="gradient-text">Shipment</span></h1>
-                <p class="text-gray-600 text-lg">Enter your CoreTransit tracking number to get real-time updates</p>
-                <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                    <span class="text-sm text-gray-400">Demo IDs:</span>
-                    <span
-                        class="font-mono bg-gray-100 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-accent hover:text-white transition"
-                        onclick="fillDemoId('COR-84729')">COR-84729</span>
-                    <span
-                        class="font-mono bg-gray-100 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-accent hover:text-white transition"
-                        onclick="fillDemoId('COR-19384')">COR-19384</span>
-                    <span
-                        class="font-mono bg-gray-100 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-accent hover:text-white transition"
-                        onclick="fillDemoId('COR-56192')">COR-56192</span>
-                </div>
+    <section class="relative pt-32 pb-16 bg-gradient-to-b from-primary/10 to-transparent">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center glass-card rounded-full px-5 py-2 mb-6 border border-white/30 shadow-lg"
+                data-aos="fade-down">
+                <i class="fa-solid fa-satellite-dish text-secondary mr-2 text-sm"></i>
+                <span class="text-primary font-semibold text-xs uppercase tracking-wider">Real-Time Tracking</span>
             </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-primary mb-4" data-aos="fade-up">Track Your <span
+                    class="text-secondary">Shipment</span></h1>
+            <p class="text-xl text-on-surface-variant max-w-2xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
+                Enter your CoreTransit tracking number to get real-time updates</p>
+            <div class="flex flex-wrap gap-2 justify-center mb-8" data-aos="fade-up" data-aos-delay="150">
+                <span class="text-sm text-on-surface-variant">Demo IDs:</span>
+                <button onclick="fillDemoId('COR-84729')"
+                    class="font-mono bg-white/20 px-3 py-1 rounded-full text-sm hover:bg-secondary hover:text-white transition">COR-84729</button>
+                <button onclick="fillDemoId('COR-19384')"
+                    class="font-mono bg-white/20 px-3 py-1 rounded-full text-sm hover:bg-secondary hover:text-white transition">COR-19384</button>
+                <button onclick="fillDemoId('COR-56192')"
+                    class="font-mono bg-white/20 px-3 py-1 rounded-full text-sm hover:bg-secondary hover:text-white transition">COR-56192</button>
+                <button onclick="fillDemoId('COR-72941')"
+                    class="font-mono bg-white/20 px-3 py-1 rounded-full text-sm hover:bg-secondary hover:text-white transition">COR-72941</button>
+            </div>
+        </div>
+    </section>
 
-            <!-- Track Card - Premium -->
-            <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border border-gray-100" data-aos="fade-up">
+    <!-- ========================================== -->
+    <!-- TRACKING FORM + RESULTS                    -->
+    <!-- ========================================== -->
+    <section class="py-8 pb-20">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="glass-card rounded-3xl p-6 md:p-10 shadow-2xl">
                 <form id="tracking-form" class="flex flex-col md:flex-row gap-4">
                     <div class="relative flex-grow">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <i class="fa-solid fa-barcode text-accent text-lg"></i>
-                        </div>
-                        <input type="text" id="tracking-id-input" required placeholder="e.g. COR-12345"
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none"><span
+                                class="material-symbols-outlined text-secondary">package_2</span></div>
+                        <input type="text" id="tracking-id-input" required placeholder="e.g. COR-84729"
                             autocomplete="off"
-                            class="premium-input w-full pl-14 pr-4 py-5 bg-gray-50 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-accent/20 focus:border-accent focus:outline-none transition font-semibold text-lg text-primary uppercase tracking-wide">
+                            class="w-full pl-14 pr-4 py-5 bg-white/80 border-2 border-gray-200 rounded-2xl focus:border-secondary focus:ring-1 focus:ring-secondary transition font-semibold text-primary uppercase tracking-wide">
                     </div>
                     <button type="submit" id="track-btn"
-                        class="btn-premium relative bg-gradient-to-r from-accent to-accentHover text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-accent/25 flex justify-center items-center gap-3 min-w-[180px]">
-                        <span>Track Now</span>
-                        <div id="track-loader" class="loader hidden"></div>
-                        <i class="fa-solid fa-arrow-right"></i>
+                        class="bg-secondary hover:bg-secondary/90 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all shadow-md flex justify-center items-center gap-3 min-w-[180px]">
+                        Track Now <span class="material-symbols-outlined">arrow_forward</span>
+                        <div id="track-loader" class="loader hidden"
+                            style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block;">
+                        </div>
                     </button>
                 </form>
 
-                <!-- Error Message -->
                 <div id="track-error"
-                    class="hidden mt-8 p-5 bg-red-50 border border-red-200 rounded-2xl text-red-700 flex items-center gap-4 animate-fade-in">
-                    <div
-                        class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-xl">
-                        <i class="fa-solid fa-circle-exclamation"></i></div>
+                    class="hidden mt-8 p-5 bg-red-50 border border-red-200 rounded-2xl text-red-700 flex items-center gap-4">
+                    <span class="material-symbols-outlined text-red-600 text-3xl">error</span>
                     <div>
                         <h4 class="font-bold text-lg">Tracking ID Not Found</h4>
-                        <p class="text-sm opacity-90">Please check the number and try again. It may take up to 24 hours
-                            for new shipments to appear.</p>
+                        <p class="text-sm">Please check the number and try again. It may take up to 24 hours for new
+                            shipments to appear.</p>
                     </div>
                 </div>
 
-                <!-- Result Area - Premium Timeline -->
-                <div id="track-result" class="hidden mt-12 border-t border-gray-100 pt-10">
+                <div id="track-result" class="hidden mt-12 border-t border-gray-200 pt-10">
                     <div class="flex flex-col md:flex-row justify-between items-start mb-8">
                         <div>
-                            <p class="text-xs text-gray-500 font-semibold uppercase tracking-widest mb-2">Tracking
-                                Number</p>
+                            <p class="text-xs text-on-surface-variant font-semibold uppercase tracking-widest mb-2">
+                                Tracking Number</p>
                             <h3 id="res-id" class="text-3xl font-extrabold text-primary">COR-00000</h3>
                         </div>
-                        <div class="mt-4 md:mt-0">
-                            <span id="res-status-badge"
-                                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold">
-                                <span class="relative flex h-2 w-2">
-                                    <span
-                                        class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2"></span>
-                                </span>
-                                In Transit
-                            </span>
-                        </div>
+                        <div class="mt-4 md:mt-0"><span id="res-status-badge"
+                                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold bg-orange-100 text-orange-700"><span
+                                    class="relative flex h-2 w-2"><span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span><span
+                                        class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span></span>In
+                                Transit</span></div>
                     </div>
 
-                    <!-- Premium Timeline Stepper -->
                     <div class="mb-10">
-                        <p class="text-xs text-gray-500 font-semibold uppercase tracking-widest mb-4">Shipment Progress
-                        </p>
+                        <p class="text-xs text-on-surface-variant font-semibold uppercase tracking-widest mb-4">Shipment
+                            Progress</p>
                         <div class="relative">
-                            <!-- Progress Bar Background -->
                             <div class="absolute top-5 left-0 w-full h-1.5 bg-gray-200 rounded-full"></div>
-                            <!-- Animated Progress -->
                             <div id="res-progress"
-                                class="absolute top-5 left-0 h-1.5 bg-gradient-to-r from-accent to-accentHover rounded-full transition-all duration-1000 progress-glow"
-                                style="width: 60%"></div>
-
-                            <!-- Timeline Steps -->
+                                class="absolute top-5 left-0 h-1.5 bg-gradient-to-r from-secondary to-secondary/80 rounded-full transition-all duration-1000"
+                                style="width: 0%"></div>
                             <div class="relative flex justify-between">
-                                <div class="timeline-step completed">
-                                    <div class="step-icon bg-accent text-white border-accent"><i
-                                            class="fa-solid fa-check text-sm"></i></div>
-                                    <p class="text-xs font-semibold mt-3 text-primary">Order Placed</p>
-                                </div>
-                                <div class="timeline-step completed">
-                                    <div class="step-icon bg-accent text-white border-accent"><i
-                                            class="fa-solid fa-check text-sm"></i></div>
-                                    <p class="text-xs font-semibold mt-3 text-primary">Processing</p>
-                                </div>
-                                <div class="timeline-step active">
-                                    <div
-                                        class="step-icon bg-white border-accent text-accent shadow-[0_0_0_4px_rgba(249,115,22,0.2)]">
-                                        <i class="fa-solid fa-truck-fast"></i></div>
-                                    <p class="text-xs font-semibold mt-3 text-accent">In Transit</p>
+                                <div class="timeline-step">
+                                    <div class="step-icon"><span class="material-symbols-outlined text-sm">inbox</span>
+                                    </div>
+                                    <p class="text-xs font-semibold mt-3">Order Placed</p>
                                 </div>
                                 <div class="timeline-step">
-                                    <div class="step-icon"><i class="fa-regular fa-circle text-gray-400"></i></div>
-                                    <p class="text-xs font-semibold mt-3 text-gray-400">Out for Delivery</p>
+                                    <div class="step-icon"><span
+                                            class="material-symbols-outlined text-sm">settings</span></div>
+                                    <p class="text-xs font-semibold mt-3">Processing</p>
                                 </div>
                                 <div class="timeline-step">
-                                    <div class="step-icon"><i class="fa-regular fa-circle text-gray-400"></i></div>
-                                    <p class="text-xs font-semibold mt-3 text-gray-400">Delivered</p>
+                                    <div class="step-icon"><span
+                                            class="material-symbols-outlined text-sm">local_shipping</span></div>
+                                    <p class="text-xs font-semibold mt-3">In Transit</p>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="step-icon"><span
+                                            class="material-symbols-outlined text-sm">delivery</span></div>
+                                    <p class="text-xs font-semibold mt-3">Out for Delivery</p>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="step-icon"><span
+                                            class="material-symbols-outlined text-sm">check_circle</span></div>
+                                    <p class="text-xs font-semibold mt-3">Delivered</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Shipment Details Grid -->
                     <div
-                        class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-gray-50 to-white p-7 rounded-2xl border border-gray-100">
+                        class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-white/50 to-white/80 p-6 rounded-2xl">
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                                <i class="fa-solid fa-location-dot"></i></div>
+                            <div
+                                class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+                                <span class="material-symbols-outlined">location_on</span></div>
                             <div>
-                                <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Current
-                                    Location</p>
-                                <p id="res-location" class="font-bold text-gray-800 text-lg">Dubai Logistics Hub, UAE
-                                </p>
+                                <p class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-1">
+                                    Current Location</p>
+                                <p id="res-location" class="font-bold text-gray-800 text-lg">-</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                                <i class="fa-regular fa-clock"></i></div>
+                            <div
+                                class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+                                <span class="material-symbols-outlined">schedule</span></div>
                             <div>
-                                <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Last
-                                    Updated</p>
-                                <p id="res-updated" class="font-bold text-gray-800 text-lg">Today, 08:45 AM</p>
+                                <p class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-1">
+                                    Last Updated</p>
+                                <p id="res-updated" class="font-bold text-gray-800 text-lg">-</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                                <i class="fa-solid fa-user"></i></div>
+                            <div
+                                class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+                                <span class="material-symbols-outlined">business</span></div>
                             <div>
-                                <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Sender</p>
-                                <p id="res-sender" class="font-medium text-gray-800">GlobalTech Industries</p>
+                                <p class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-1">
+                                    Sender</p>
+                                <p id="res-sender" class="font-medium text-gray-800">-</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center text-accent">
-                                <i class="fa-solid fa-building"></i></div>
+                            <div
+                                class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+                                <span class="material-symbols-outlined">person</span></div>
                             <div>
-                                <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Receiver
-                                </p>
-                                <p id="res-receiver" class="font-medium text-gray-800">Acme Corp Ltd.</p>
+                                <p class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold mb-1">
+                                    Receiver</p>
+                                <p id="res-receiver" class="font-medium text-gray-800">-</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Share & Actions -->
                     <div class="mt-8 flex flex-wrap gap-4 justify-between items-center">
-                        <div class="flex gap-3">
-                            <button onclick="copyTrackingLink()"
-                                class="text-sm text-gray-500 hover:text-accent transition flex items-center gap-2">
-                                <i class="fa-regular fa-copy"></i> Copy Link
-                            </button>
-                            <button onclick="window.print()"
-                                class="text-sm text-gray-500 hover:text-accent transition flex items-center gap-2">
-                                <i class="fa-regular fa-file-pdf"></i> Print
-                            </button>
-                        </div>
-                        <button onclick="window.location.href='index.html#contact'"
-                            class="text-sm text-accent font-semibold hover:underline flex items-center gap-2">
-                            Need Help? Contact Support <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+                        <div class="flex gap-3"><button onclick="copyTrackingLink()"
+                                class="text-sm text-on-surface-variant hover:text-secondary transition flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-base">content_copy</span> Copy
+                                Link</button><button onclick="window.print()"
+                                class="text-sm text-on-surface-variant hover:text-secondary transition flex items-center gap-2"><span
+                                    class="material-symbols-outlined text-base">print</span> Print</button></div>
+                        <a href="contact.html"
+                            class="text-sm text-secondary font-semibold hover:underline flex items-center gap-2">Need
+                            Help? Contact Support <span
+                                class="material-symbols-outlined text-sm">arrow_forward</span></a>
                     </div>
                 </div>
             </div>
 
-            <!-- FAQ Quick Links -->
-            <div class="mt-16 text-center" data-aos="fade-up">
+            <div class="mt-12 text-center">
                 <h3 class="text-xl font-bold text-primary mb-6">Frequently Asked Questions</h3>
                 <div class="flex flex-wrap gap-4 justify-center">
-                    <a href="#" class="text-gray-600 hover:text-accent transition text-sm">Where is my package?</a>
-                    <span class="text-gray-300">|</span>
-                    <a href="#" class="text-gray-600 hover:text-accent transition text-sm">Delivery time estimates</a>
-                    <span class="text-gray-300">|</span>
-                    <a href="#" class="text-gray-600 hover:text-accent transition text-sm">International shipping</a>
-                    <span class="text-gray-300">|</span>
-                    <a href="#" class="text-gray-600 hover:text-accent transition text-sm">File a claim</a>
+                    <a href="#" class="text-on-surface-variant hover:text-secondary transition text-sm">Where is my
+                        package?</a><span class="text-gray-300">|</span>
+                    <a href="#" class="text-on-surface-variant hover:text-secondary transition text-sm">Delivery time
+                        estimates</a><span class="text-gray-300">|</span>
+                    <a href="#" class="text-on-surface-variant hover:text-secondary transition text-sm">International
+                        shipping</a><span class="text-gray-300">|</span>
+                    <a href="#" class="text-on-surface-variant hover:text-secondary transition text-sm">File a claim</a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- ========================================== -->
-    <!-- PREMIUM FOOTER                             -->
+    <!-- FOOTER (simplified)                        -->
     <!-- ========================================== -->
-    <footer class="bg-darkBg text-gray-300 py-12 border-t-4 border-accent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="flex items-center justify-center mb-6">
-                <div class="relative">
-                    <div class="absolute inset-0 bg-accent rounded-full blur-lg opacity-50"></div>
-                    <div
-                        class="relative w-10 h-10 bg-gradient-to-br from-accent to-accentHover rounded-full flex items-center justify-center text-white shadow-lg">
-                        <i class="fa-solid fa-earth-americas"></i>
-                    </div>
-                </div>
-                <span class="font-bold text-2xl text-white ml-3">Core<span class="text-accent">Transit</span></span>
-            </div>
-            <p class="text-gray-400 text-sm mb-4">&copy; 2026 CoreTransit Logistics. All rights reserved.</p>
-            <div class="flex gap-6 justify-center text-sm">
-                <a href="#" class="text-gray-400 hover:text-accent transition">Privacy Policy</a>
-                <a href="#" class="text-gray-400 hover:text-accent transition">Terms of Service</a>
-                <a href="#" class="text-gray-400 hover:text-accent transition">Cookie Policy</a>
-            </div>
+    <footer class="bg-on-background py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="text-2xl font-bold text-white mb-6">Core<span class="text-secondary">Transit</span></div>
+            <p class="text-white/30 text-sm mb-4">© 2025 CoreTransit Logistics. All rights reserved.</p>
+            <div class="flex gap-6 justify-center text-sm"><a href="#"
+                    class="text-white/30 hover:text-secondary transition">Privacy Policy</a><a href="#"
+                    class="text-white/30 hover:text-secondary transition">Terms of Service</a><a href="#"
+                    class="text-white/30 hover:text-secondary transition">Cookie Policy</a></div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
     <button id="back-to-top"
-        class="back-to-top fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-accent to-accentHover text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center text-xl z-40 border-2 border-white/30">
-        <i class="fa-solid fa-arrow-up"></i>
-    </button>
+        class="back-to-top fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-secondary to-secondary/80 text-white rounded-full shadow-xl hover:shadow-2xl transition-all flex items-center justify-center text-xl z-40 border-2 border-white/30"><i
+            class="fa-solid fa-arrow-up"></i></button>
 
-    <!-- Scripts -->
+    <!-- ========================================== -->
+    <!-- SCRIPTS (USE ORIGINAL tracking.js)         -->
+    <!-- ========================================== -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="js/config.js"></script>
     <script src="js/tracking.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); document.body.classList.toggle('mobile-menu-open'); });
+            document.addEventListener('click', (e) => { if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); document.body.classList.remove('mobile-menu-open'); } });
+        }
+
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => { if (window.scrollY > 500) backToTop.classList.add('visible'); else backToTop.classList.remove('visible'); });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Expose fillDemoId to global scope for demo buttons
+        window.fillDemoId = function (id) {
+            const input = document.getElementById('tracking-id-input');
+            if (input) {
+                input.value = id;
+                // Trigger the track function that tracking.js defines
+                if (typeof trackShipment === 'function') {
+                    trackShipment(id);
+                } else {
+                    // Fallback: submit the form
+                    document.getElementById('tracking-form').dispatchEvent(new Event('submit'));
+                }
+            }
+        };
+    </script>
 </body>
 
 </html>
