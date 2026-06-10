@@ -1,645 +1,354 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>CoreTransit | Global Logistics &amp; Supply Chain Solutions</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>CoreTransit | Global Logistics Reimagined</title>
 
-    <!-- Google Fonts + Tailwind + AOS + FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
 
-    <!-- Supabase SDK (for newsletter) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts + Tailwind + Icons + AOS + Supabase -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "on-tertiary": "#ffffff",
-                        "inverse-surface": "#213145",
-                        "surface-dim": "#cbdbf5",
-                        "on-primary-fixed": "#00164e",
-                        "surface-tint": "#4059aa",
-                        "surface-container-low": "#eff4ff",
-                        "inverse-on-surface": "#eaf1ff",
-                        "on-tertiary-fixed-variant": "#004c6e",
-                        "background": "#f8f9ff",
-                        "tertiary": "#002e44",
-                        "surface-container": "#e5eeff",
-                        "inverse-primary": "#b6c4ff",
-                        "primary-fixed-dim": "#b6c4ff",
-                        "on-error": "#ffffff",
-                        "primary": "#00236f",
-                        "outline": "#757682",
-                        "on-tertiary-fixed": "#001e2f",
-                        "on-tertiary-container": "#36b6fb",
-                        "on-primary": "#ffffff",
-                        "secondary": "#9d4300",
-                        "surface-variant": "#d3e4fe",
-                        "tertiary-container": "#004565",
-                        "on-surface-variant": "#444651",
-                        "on-background": "#0b1c30",
-                        "outline-variant": "#c5c5d3",
-                        "on-secondary-container": "#5c2400",
-                        "on-secondary-fixed": "#341100",
-                        "surface-container-highest": "#d3e4fe",
-                        "on-surface": "#0b1c30",
-                        "secondary-container": "#fd761a",
-                        "tertiary-fixed-dim": "#89ceff",
-                        "secondary-fixed-dim": "#ffb690",
-                        "surface-bright": "#f8f9ff",
-                        "on-primary-fixed-variant": "#264191",
-                        "primary-fixed": "#dce1ff",
-                        "primary-container": "#1e3a8a",
-                        "tertiary-fixed": "#c9e6ff",
-                        "on-secondary": "#ffffff",
-                        "on-primary-container": "#90a8ff",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#dce9ff",
-                        "surface-container-lowest": "#ffffff",
-                        "on-error-container": "#93000a",
-                        "surface": "#f8f9ff",
-                        "error": "#ba1a1a",
-                        "on-secondary-fixed-variant": "#783200",
-                        "secondary-fixed": "#ffdbca"
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
+  <!-- Our custom design system (overrides Tailwind where needed) -->
+  <link rel="stylesheet" href="css/design-system.css">
 
-    <style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(to bottom, rgba(11, 28, 48, 0.6), rgba(11, 28, 48, 0.9));
-        }
-
-        .btn-primary-gradient {
-            background: linear-gradient(135deg, #36b6fb 0%, #00236f 100%);
-        }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-
-        .back-to-top {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        @media (max-width: 768px) {
-            .back-to-top {
-                bottom: 16px !important;
-                right: 16px !important;
-                width: 48px !important;
-                height: 48px !important;
-            }
-        }
-
-        #mobile-menu {
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-open {
-            overflow: hidden;
-        }
-
-        .client-logo {
-            filter: grayscale(100%);
-            opacity: 0.7;
-            transition: all 0.3s ease;
-        }
-
-        .client-logo:hover {
-            filter: grayscale(0);
-            opacity: 1;
-            transform: scale(1.05);
-        }
-    </style>
+  <style>
+    /* Additional minor tweaks for this page only */
+    .hero-gradient-overlay {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7));
+    }
+    .client-logo {
+      filter: grayscale(100%);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+    .client-logo:hover {
+      filter: grayscale(0);
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
+<body class="bg-white">
 
-<body class="bg-background text-on-background font-sans overflow-x-hidden">
+<!-- ==================== NAVIGATION ==================== -->
+<header class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+  <nav class="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
+    <div class="text-2xl font-extrabold text-black">
+      Core<span class="text-[#d40511]">Transit</span>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a href="index.html" class="font-semibold text-black border-b-2 border-[#ffcc00] pb-1">Home</a>
+      <a href="about.html" class="text-gray-700 hover:text-black transition">About</a>
+      <a href="services.html" class="text-gray-700 hover:text-black transition">Services</a>
+      <a href="contact.html" class="text-gray-700 hover:text-black transition">Contact</a>
+    </div>
+    <div class="hidden md:block">
+      <a href="track.html" class="bg-[#ffcc00] text-black px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-md hover:shadow-lg transition">
+        Track Shipment →
+      </a>
+    </div>
+    <button id="mobile-menu-btn" class="md:hidden text-2xl"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 rounded-2xl mt-2 p-4 shadow-xl">
+    <a href="index.html" class="block py-3 font-bold">Home</a>
+    <a href="about.html" class="block py-3">About</a>
+    <a href="services.html" class="block py-3">Services</a>
+    <a href="contact.html" class="block py-3">Contact</a>
+    <a href="track.html" class="block mt-3 bg-[#ffcc00] text-center py-3 rounded-full font-bold">Track Shipment</a>
+    <a href="dashboard.html" class="block mt-2 text-center text-sm text-gray-500">Admin</a>
+  </div>
+</header>
 
-    <!-- ========================================== -->
-    <!-- PREMIUM NAVIGATION (with mobile menu)      -->
-    <!-- ========================================== -->
-    <header
-        class="fixed w-full z-50 bg-white/60 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-500"
-        id="navbar">
-        <nav class="flex justify-between items-center px-4 md:px-8 py-4 max-w-7xl mx-auto">
-            <div class="text-2xl font-bold text-primary dark:text-on-primary-container">
-                Core<span class="text-secondary">Transit</span>
-            </div>
+<!-- ==================== HERO SECTION ==================== -->
+<section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070" alt="Logistics">
+    <div class="absolute inset-0 hero-gradient-overlay"></div>
+  </div>
+  <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+    <h1 class="text-5xl md:text-7xl font-extrabold mb-6">Moving What <span class="text-[#ffcc00]">Matters Most</span></h1>
+    <p class="text-lg md:text-xl mb-12 opacity-90">Seamless global logistics powered by precision technology and a worldwide network.</p>
+    <div class="glass-card p-2 rounded-full flex flex-col md:flex-row gap-2 max-w-xl mx-auto bg-white/20 backdrop-blur-md">
+      <input id="hero-track-input" type="text" placeholder="Enter Tracking ID (e.g., COR-84729)" class="flex-1 bg-transparent px-6 py-4 text-white placeholder-white/80 outline-none">
+      <button id="hero-track-btn" class="bg-[#ffcc00] text-black px-8 py-4 rounded-full font-bold hover:bg-[#e6b800] transition">Track Now</button>
+    </div>
+  </div>
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer" onclick="document.getElementById('clients').scrollIntoView({behavior:'smooth'})">
+    <i class="fa-solid fa-chevron-down text-white text-2xl"></i>
+  </div>
+</section>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="index.html"
-                    class="text-secondary border-b-2 border-secondary font-semibold text-sm uppercase tracking-wider">Home</a>
-                <a href="about.html"
-                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">About</a>
-                <a href="services.html"
-                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Services</a>
-                <a href="contact.html"
-                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Contact</a>
-            </div>
+<!-- ==================== CLIENTS SECTION ==================== -->
+<section id="clients" class="py-12 border-y border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <p class="text-gray-500 text-sm uppercase tracking-widest mb-8">Trusted by 10,000+ clients worldwide</p>
+    <div class="flex flex-wrap justify-center gap-8">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/spotify/default.svg" class="client-logo h-8 w-auto" alt="Spotify">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/aws/default.svg" class="client-logo h-8 w-auto" alt="AWS">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/samsung/default.svg" class="client-logo h-8 w-auto" alt="Samsung">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/nike/default.svg" class="client-logo h-8 w-auto" alt="Nike">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/microsoft/default.svg" class="client-logo h-8 w-auto" alt="Microsoft">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/philips/default.svg" class="client-logo h-8 w-auto" alt="Philips">
+      <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/cocacola/default.svg" class="client-logo h-8 w-auto" alt="Coca-Cola">
+    </div>
+  </div>
+</section>
 
-            <!-- Desktop Track Button -->
-            <div class="hidden md:flex items-center gap-3">
-                <a href="track.html"
-                    class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 transition-all shadow-md hover:shadow-lg">
-                    Track Shipment
-                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-                </a>
-            </div>
+<!-- ==================== ABOUT SNIPPET WITH STATS ==================== -->
+<section class="py-20">
+  <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
+    <div data-aos="fade-right">
+      <span class="bg-[#ffcc00]/20 text-[#d40511] px-4 py-1 rounded-full text-xs font-bold">About Our Journey</span>
+      <h2 class="text-4xl md:text-5xl font-extrabold mt-4 mb-6">Provide Logistics Support Since 1996</h2>
+      <p class="text-gray-600 text-lg mb-8">At CoreTransit, we redefine movement of goods through cutting‑edge technology and reliability. What started as a local courier has evolved into a global powerhouse serving 150+ countries.</p>
+      <div class="grid grid-cols-3 gap-6 mb-10">
+        <div><div class="stat-number" data-value="2.5">0</div><p class="text-sm text-gray-500">M Packages Yearly</p></div>
+        <div><div class="stat-number" data-value="140">0</div><p class="text-sm text-gray-500">Countries</p></div>
+        <div><div class="stat-number" data-value="99">0</div><p class="text-sm text-gray-500">Satisfaction %</p></div>
+      </div>
+      <div class="border-l-4 border-[#ffcc00] pl-6 italic text-gray-700">
+        “Our mission is to bridge distances and empower businesses to scale globally.”
+        <footer class="mt-2 not-italic font-semibold">— Michael Vance, CEO</footer>
+      </div>
+    </div>
+    <div class="relative" data-aos="fade-left">
+      <div class="rounded-3xl overflow-hidden shadow-xl">
+        <img src="https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=2071" class="w-full h-[500px] object-cover" alt="Warehouse">
+      </div>
+      <div class="absolute bottom-6 right-6 glass-card p-4 rounded-xl">
+        <p class="font-bold text-3xl text-[#d40511]">1996</p>
+        <p class="text-xs text-gray-600">Est. Since</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <!-- Mobile Hamburger Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-primary text-2xl focus:outline-none">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </nav>
+<!-- ==================== SERVICES PREVIEW (4 cards) ==================== -->
+<section class="py-20 bg-[#f2f2f2]">
+  <div class="max-w-7xl mx-auto px-4 text-center mb-12">
+    <h2 class="text-4xl font-extrabold">World‑Class Services</h2>
+    <p class="text-gray-600 mt-2">Comprehensive logistics for your competitive edge</p>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-6">
+    <div class="card cursor-pointer" onclick="location.href='services.html'">
+      <i class="fa-solid fa-warehouse text-4xl text-[#d40511] mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Warehousing</h3>
+      <p class="text-gray-600 text-sm">State‑of‑the‑art storage with real‑time inventory management.</p>
+      <a href="services.html" class="inline-block mt-4 text-[#d40511] font-semibold">Explore →</a>
+    </div>
+    <div class="card cursor-pointer" onclick="location.href='services.html'">
+      <i class="fa-solid fa-chart-line text-4xl text-[#d40511] mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Value‑Added</h3>
+      <p class="text-gray-600 text-sm">Customised packaging, labelling, and quality control.</p>
+      <a href="services.html" class="inline-block mt-4 text-[#d40511] font-semibold">Explore →</a>
+    </div>
+    <div class="card cursor-pointer" onclick="location.href='services.html'">
+      <i class="fa-solid fa-truck-fast text-4xl text-[#d40511] mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Transportation</h3>
+      <p class="text-gray-600 text-sm">Multi‑modal global freight via sea, air, and land.</p>
+      <a href="services.html" class="inline-block mt-4 text-[#d40511] font-semibold">Explore →</a>
+    </div>
+    <div class="card cursor-pointer" onclick="location.href='services.html'">
+      <i class="fa-solid fa-diagram-project text-4xl text-[#d40511] mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Supply Chain</h3>
+      <p class="text-gray-600 text-sm">End‑to‑end orchestration and optimisation of complex chains.</p>
+      <a href="services.html" class="inline-block mt-4 text-[#d40511] font-semibold">Explore →</a>
+    </div>
+  </div>
+</section>
 
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 rounded-2xl mt-2 p-4 shadow-xl">
-            <a href="index.html" class="block py-3 px-4 text-primary font-semibold rounded-lg bg-white/20">Home</a>
-            <a href="about.html"
-                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">About</a>
-            <a href="services.html"
-                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Services</a>
-            <a href="contact.html"
-                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Contact</a>
-            <a href="track.html"
-                class="block mt-3 bg-primary text-white px-6 py-3 rounded-full font-semibold text-center">Track
-                Shipment</a>
-        </div>
-    </header>
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="py-20">
+  <div class="max-w-7xl mx-auto px-4 text-center mb-12">
+    <h2 class="text-4xl font-extrabold">What Our Clients Say</h2>
+    <p class="text-gray-600 mt-2">Real feedback from global leaders</p>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+    <div class="card" data-aos="fade-up">
+      <div class="flex text-[#ffcc00] mb-4">★★★★★</div>
+      <p class="text-gray-700 mb-6">“CoreTransit transformed our international shipping. Their transparency and tracking are unmatched.”</p>
+      <div class="flex items-center gap-4">
+        <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-12 h-12 rounded-full object-cover">
+        <div><p class="font-bold">Sarah Jenkins</p><p class="text-sm text-gray-500">Logistics Director, GlobalTech</p></div>
+      </div>
+    </div>
+    <div class="card" data-aos="fade-up" data-aos-delay="100">
+      <div class="flex text-[#ffcc00] mb-4">★★★★★</div>
+      <p class="text-gray-700 mb-6">“Reliability is everything. CoreTransit has never missed a deadline, even with complex supply chains.”</p>
+      <div class="flex items-center gap-4">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-12 h-12 rounded-full object-cover">
+        <div><p class="font-bold">David Chen</p><p class="text-sm text-gray-500">Supply Chain Manager, ASICS</p></div>
+      </div>
+    </div>
+    <div class="card" data-aos="fade-up" data-aos-delay="200">
+      <div class="flex text-[#ffcc00] mb-4">★★★★★</div>
+      <p class="text-gray-700 mb-6">“They feel like an internal department, not a vendor. The tech integration is seamless.”</p>
+      <div class="flex items-center gap-4">
+        <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-12 h-12 rounded-full object-cover">
+        <div><p class="font-bold">Elena Rodriguez</p><p class="text-sm text-gray-500">VP of Operations, Samsung</p></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- ========================================== -->
-    <!-- HERO SECTION (working tracking input)      -->
-    <!-- ========================================== -->
-    <section class="relative h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div class="absolute inset-0 z-0">
-            <img alt="Cargo Ship" class="w-full h-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHAGeN65DWPL3QL8dppNBytk5wTg-lQJ3MZYCNHQP1bp7xv8DZWBdfwUTLjMH1BhtQMIqxLNGndX72ovShRqXpww9gZv__1MVxV4qLj55VRGrozD0JK6iMwQAcq7UngZ-mqmaUPVGGgGTm1Kiv8xhc57yK42DlytxgrSjvw66CTS4wsyXjT2nJyfiGXIaY_bme_1q5TI5E1o1GrHFMal0B4T2RncjqozHaVUSpIIt92aTsykUfYVVzFrO2VBBXA9SnH4cOPxYIxKw">
-            <div class="absolute inset-0 hero-gradient"></div>
-        </div>
+<!-- ==================== CALL TO ACTION ==================== -->
+<section class="max-w-7xl mx-auto px-4 mb-24">
+  <div class="relative rounded-3xl overflow-hidden bg-black p-12 md:p-20 text-center">
+    <div class="absolute inset-0 opacity-20">
+      <img src="https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=2071" class="w-full h-full object-cover">
+    </div>
+    <div class="relative z-10">
+      <h2 class="text-white text-4xl md:text-5xl font-extrabold mb-6">Ready to Streamline Your Logistics?</h2>
+      <p class="text-gray-300 text-lg mb-10">Connect with our specialists and accelerate your global growth.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="contact.html" class="btn-primary bg-[#ffcc00] text-black">Get a Quote →</a>
+        <a href="track.html" class="glass-card text-white px-6 py-3 rounded-full font-semibold">Track Shipment →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <h1 class="text-white text-5xl md:text-7xl font-extrabold mb-6 leading-tight">Moving What <span
-                    class="text-secondary">Matters Most</span></h1>
-            <p class="text-surface-dim text-lg md:text-xl mb-12 max-w-2xl mx-auto">Seamless global logistics solutions
-                powered by precision technology and a worldwide network that never sleeps.</p>
+<!-- ==================== FOOTER ==================== -->
+<footer class="bg-black text-white py-16">
+  <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8">
+    <div>
+      <div class="text-2xl font-bold">Core<span class="text-[#ffcc00]">Transit</span></div>
+      <p class="text-gray-400 mt-4">Connecting continents since 1996.</p>
+      <div class="flex gap-4 mt-6">
+        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-facebook-f"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4 class="font-bold mb-4">Quick Links</h4>
+      <ul class="space-y-2 text-gray-400">
+        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+        <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+        <li><a href="#" class="hover:text-white">Global Network</a></li>
+        <li><a href="#" class="hover:text-white">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold mb-4">Support</h4>
+      <ul class="space-y-2 text-gray-400">
+        <li><a href="contact.html" class="hover:text-white">Contact Us</a></li>
+        <li><a href="#" class="hover:text-white">Help Center</a></li>
+        <li><a href="#" class="hover:text-white">Shipping Guide</a></li>
+        <li><a href="#" class="hover:text-white">Tax & Customs</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold mb-4">Newsletter</h4>
+      <div class="relative">
+        <input id="newsletter-email" type="email" placeholder="Your email" class="w-full bg-white/10 border border-gray-700 rounded-full px-4 py-2 text-white placeholder-gray-400">
+        <button id="newsletter-btn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#ffcc00] text-black px-4 py-1 rounded-full text-sm font-bold">Send</button>
+      </div>
+      <div id="newsletter-msg" class="text-green-400 text-sm mt-2 hidden"></div>
+    </div>
+  </div>
+  <div class="text-center text-gray-500 text-sm mt-12 pt-8 border-t border-gray-800">© 2025 CoreTransit Logistics. All rights reserved.</div>
+</footer>
 
-            <!-- Premium Track Search Bar -->
-            <div class="glass-card p-2 rounded-full flex flex-col md:flex-row items-center gap-2 max-w-xl mx-auto">
-                <div class="flex-1 w-full px-6 flex items-center gap-3">
-                    <span class="material-symbols-outlined text-primary">package_2</span>
-                    <input type="text" id="hero-track-input" placeholder="Enter Tracking ID (e.g., COR-84729)"
-                        class="bg-transparent border-none focus:ring-0 w-full text-white placeholder-white/60 outline-none">
-                </div>
-                <button id="hero-track-btn"
-                    class="btn-primary-gradient w-full md:w-auto text-white px-8 py-4 rounded-full font-semibold text-sm hover:shadow-lg transition-all active:scale-95">
-                    Track Now
-                </button>
-            </div>
-        </div>
+<button id="back-to-top" class="back-to-top fixed bottom-6 right-6 w-12 h-12 bg-[#ffcc00] rounded-full shadow-lg flex items-center justify-center cursor-pointer z-50"><i class="fa-solid fa-arrow-up text-black"></i></button>
 
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer"
-            onclick="document.getElementById('clients-section').scrollIntoView({behavior:'smooth'})">
-            <span class="material-symbols-outlined text-white text-4xl">keyboard_double_arrow_down</span>
-        </div>
-    </section>
+<!-- ==================== SCRIPTS (identical to original – only visual changes) ==================== -->
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Initialize AOS
+  AOS.init({ duration: 800, once: true, offset: 100 });
 
-    <!-- ========================================== -->
-    <!-- CLIENTS SECTION (Packed with SVG icons)    -->
-    <!-- ========================================== -->
-    <section id="clients-section" class="py-16 bg-white border-y border-outline-variant/20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="font-semibold text-sm text-outline uppercase tracking-widest mb-10" data-aos="fade-up">Trusted by
-                10,000+ Clients Worldwide</p>
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-                <!-- Spotify -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/spotify/default.svg"
-                    alt="Spotify" width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up"
-                    data-aos-delay="100">
-                <!-- AWS -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/aws/default.svg" alt="AWS"
-                    width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up" data-aos-delay="150">
-                <!-- Samsung -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/samsung/default.svg"
-                    alt="Samsung" width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up"
-                    data-aos-delay="200">
-                <!-- ASICS -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/asics/default.svg" alt="ASICS"
-                    width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up" data-aos-delay="250">
-                <!-- Philips -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/philips/default.svg"
-                    alt="Philips" width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up"
-                    data-aos-delay="300">
-                <!-- Nike -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/nike/default.svg" alt="Nike"
-                    width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up" data-aos-delay="350">
-                <!-- Coca-Cola -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/cocacola/default.svg"
-                    alt="Coca-Cola" width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up"
-                    data-aos-delay="400">
-                <!-- Microsoft -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/microsoft/default.svg"
-                    alt="Microsoft" width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up"
-                    data-aos-delay="450">
-                <!-- Maersk (example of logistics brand) -->
-                <img src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/maersk/default.svg" alt="Maersk"
-                    width="48" height="48" class="client-logo h-10 w-auto" data-aos="fade-up" data-aos-delay="500">
-            </div>
-        </div>
-    </section>
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); document.body.classList.toggle('mobile-menu-open'); });
+    document.addEventListener('click', (e) => { if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); document.body.classList.remove('mobile-menu-open'); } });
+  }
 
-    <!-- ========================================== -->
-    <!-- ABOUT SNIPPET (with stats counter)         -->
-    <!-- ========================================== -->
-    <section class="py-24 bg-background overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div data-aos="fade-right">
-                <span
-                    class="inline-block bg-secondary/20 text-secondary px-4 py-1.5 rounded-full font-semibold text-xs mb-6">About
-                    Our Journey</span>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-on-background mb-8">Provide Logistics Support Since
-                    1996</h2>
-                <p class="text-on-surface-variant text-lg mb-10 leading-relaxed">At CoreTransit, we redefine the
-                    movement of goods through cutting-edge technology and a commitment to reliability. What started as a
-                    local courier service has evolved into a global logistics powerhouse.</p>
-                <div class="grid grid-cols-3 gap-6 mb-12">
-                    <div>
-                        <div class="text-primary text-3xl font-extrabold stat-number" data-value="2.5">0</div>
-                        <p class="text-sm">M Packages Yearly</p>
-                    </div>
-                    <div>
-                        <div class="text-primary text-3xl font-extrabold stat-number" data-value="140">0</div>
-                        <p class="text-sm">Countries</p>
-                    </div>
-                    <div>
-                        <div class="text-primary text-3xl font-extrabold stat-number" data-value="99">0</div>
-                        <p class="text-sm">Satisfaction %</p>
-                    </div>
-                </div>
-                <div class="border-l-4 border-secondary pl-6 italic text-lg text-on-background">
-                    "Our mission is to bridge distances and empower businesses to scale globally through seamless supply
-                    chain solutions."
-                    <footer class="mt-4 not-italic font-semibold text-on-surface-variant">— Michael Vance, CEO</footer>
-                </div>
-            </div>
-            <div class="relative" data-aos="fade-left">
-                <div class="rounded-3xl overflow-hidden shadow-2xl">
-                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3-afLukdV_wKYKGsA1uC5kWRVImMXTia0HyQN0Y8Whr6iMcMadTgXCJ6-r_KKU-Nfk2TamrdubZVg_Lhadpnlt30lmUUExLaXkQ3jl0A8Mr6okbaHX1qGFHujbSrpn2ByTgovMMM2VW-HlTOl-dsQH-RLPwT5u6TlIsenNLIWl_b_F5jn7q2GCz8-c3PMFJncrCbUpayMoSpGnWUtM86k0BikEzzE0YQHFwQ-u5a4xmv4ISjb8P4cLOWLVYCXGfR-wuwm6tFywVs"
-                        alt="Warehouse"
-                        class="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700">
-                </div>
-                <div class="absolute bottom-6 right-6 glass-card p-6 rounded-2xl shadow-xl border border-white/30">
-                    <p class="text-primary font-bold text-4xl mb-1">1996</p>
-                    <p class="text-xs font-semibold uppercase">Est. Since</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  // Back to top
+  const backBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => { if (window.scrollY > 500) backBtn.classList.add('visible'); else backBtn.classList.remove('visible'); });
+  backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    <!-- ========================================== -->
-    <!-- SERVICES GRID (4 complete cards)           -->
-    <!-- ========================================== -->
-    <section class="py-24 bg-surface-container-low">
-        <div class="max-w-7xl mx-auto px-4 text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-primary mb-4">World-Class Services</h2>
-            <p class="text-on-surface-variant max-w-2xl mx-auto">We offer comprehensive logistics and supply chain
-                management designed to give your business a competitive edge.</p>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Service 1 -->
-            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer"
-                onclick="window.location.href='services.html'">
-                <div class="h-48 overflow-hidden"><img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTCZvXLK8dlnbXMYeR9RVCRY308oAzPZ7Ptx2zpUNyDDl4pbpIZD_1Befqoj7qLEcwqLEcOG2nqLTMI1Ty5xLgDzWqR_l7GiRMN9BTAGzQmhFoGvNWCO8no5epDV-x5wN6F7AKmqdS_n-aGwtTOc_s3DsFv1Q-de1YPFnOJyHruiD06JPgfE8ZFgiJ3cFI7giuKt8W_o2ZzthWYVk7zMntw5CENMR3De93lzTEtbkcuQOOCiUvjYVf6hB8WByUXMDnwnKRqgbeyHA"
-                        alt="Warehousing"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="p-8">
-                    <div class="text-secondary mb-4"><span class="material-symbols-outlined text-4xl">warehouse</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Warehousing</h3>
-                    <p class="text-sm text-on-surface-variant mb-6">State-of-the-art storage facilities with real-time
-                        inventory management.</p><a href="services.html"
-                        class="text-primary font-semibold flex items-center gap-2 group-hover:text-secondary">Explore
-                        <span class="material-symbols-outlined text-[18px]">north_east</span></a>
-                </div>
-            </div>
-            <!-- Service 2 -->
-            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer"
-                onclick="window.location.href='services.html'">
-                <div class="h-48 overflow-hidden"><img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6nKT2wnQQht99GCFDhk3DIvClb-mTe_BV1jgQgBVz9yHmtzLE_lv8LNNpFSS-XR4WNsqmGWEavuKC77_rjPUvDFPO0FPpWNtXmrE_8KlLO9p1NHg8j4t0zmhzOEsgaEHilALjnnpP9i-PKry_r6xZwDFB2Rb0qhMLXviz1lCe_p3fdtptWmrd6oubvUHJ_KQ9kQbwvE_eUTD_i6c6AnyovcjLBYRA7474hlU4MBmdA3zyhuz_cqqomQFPU6k7PdiH__HB5TWtTac"
-                        alt="Value Added"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="p-8">
-                    <div class="text-secondary mb-4"><span class="material-symbols-outlined text-4xl">analytics</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">Value-Added</h3>
-                    <p class="text-sm text-on-surface-variant mb-6">Customized packaging, labeling, and quality control
-                        solutions.</p><a href="services.html"
-                        class="text-primary font-semibold flex items-center gap-2 group-hover:text-secondary">Explore
-                        <span class="material-symbols-outlined text-[18px]">north_east</span></a>
-                </div>
-            </div>
-            <!-- Service 3 -->
-            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer"
-                onclick="window.location.href='services.html'">
-                <div class="h-48 overflow-hidden"><img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfUiF52_qpI9MpIGq2N28GS-yL2bG3KYmJR21EunJYz6Ecf2cGGZXNBOhy2j3hZ_XOSPgwWp-O7Vd6JTAf_PhkcrSGZ-ZwMhFREPdlmOumCBpon6eTYNfSAxS_HQmNlt2s_2L7OVyzJme7Z7_4wpNaX9Q3PS1NizCmbn3t50ZuBtSzblHUoJ09Ndm9cWwkr0ch4aAF9iVh1OvLMmJmtrU9UokSLuLMIZ3V2Af5Gg0XeEkNrc59Z5DBHKjIzeVOfd-h1MVS6OtVCTY"
-                        alt="Transportation"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="p-8">
-                    <div class="text-secondary mb-4"><span
-                            class="material-symbols-outlined text-4xl">local_shipping</span></div>
-                    <h3 class="text-2xl font-bold mb-3">Transportation</h3>
-                    <p class="text-sm text-on-surface-variant mb-6">Multi-modal global freight via sea, air, and land
-                        networks.</p><a href="services.html"
-                        class="text-primary font-semibold flex items-center gap-2 group-hover:text-secondary">Explore
-                        <span class="material-symbols-outlined text-[18px]">north_east</span></a>
-                </div>
-            </div>
-            <!-- Service 4 -->
-            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer"
-                onclick="window.location.href='services.html'">
-                <div class="h-48 overflow-hidden"><img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx2AevcCaqczAEt4ZPlCuYcA0Mt1mPWwFoeaNF2gWtaes6IoboDXJfiWrYy2zdIDrCBu2q6ViYUbvsCXvLO8BjTth4rMXTry2NwAxfsza92TGSMawEW94wnty2uoeeqUMozgaAJP1tOwcxIwVqaeZ1YdRbtHxMbjXzk1CQhqYGxLORmjcUt9EGB3OnwuFYmqxURmITWvCyVO1Gk5i7J8ZFm7auxgd8cqKywXSHLvqFggbafuWaigBe7pSv-LEQnzBmJmxGZQVcs1I"
-                        alt="Supply Chain"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="p-8">
-                    <div class="text-secondary mb-4"><span class="material-symbols-outlined text-4xl">hub</span></div>
-                    <h3 class="text-2xl font-bold mb-3">Supply Chain</h3>
-                    <p class="text-sm text-on-surface-variant mb-6">End-to-end orchestration and optimization of complex
-                        supply chains.</p><a href="services.html"
-                        class="text-primary font-semibold flex items-center gap-2 group-hover:text-secondary">Explore
-                        <span class="material-symbols-outlined text-[18px]">north_east</span></a>
-                </div>
-            </div>
-        </div>
-    </section>
+  // Hero tracking redirect
+  const heroInput = document.getElementById('hero-track-input');
+  const heroTrackBtn = document.getElementById('hero-track-btn');
+  if (heroTrackBtn && heroInput) {
+    heroTrackBtn.addEventListener('click', () => { if (heroInput.value.trim()) sessionStorage.setItem('prefill_tracking_id', heroInput.value.trim()); window.location.href = 'track.html'; });
+    heroInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') heroTrackBtn.click(); });
+  }
 
-    <!-- ========================================== -->
-    <!-- TESTIMONIALS (3 complete cards)            -->
-    <!-- ========================================== -->
-    <section class="py-24 bg-background">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-extrabold text-primary mb-4">What Our Clients Say</h2>
-                <p class="text-on-surface-variant max-w-2xl mx-auto">Real feedback from global leaders who trust
-                    CoreTransit.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Testimonial 1 -->
-                <div class="glass-card p-8 rounded-3xl" data-aos="fade-up" data-aos-delay="100">
-                    <div class="text-secondary mb-4 flex gap-1"><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span></div>
-                    <p class="text-on-surface mb-6">"CoreTransit transformed our international shipping process. Their
-                        transparency and tracking capabilities are unmatched in the industry."</p>
-                    <div class="flex items-center gap-4"><img
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ2jt3o-ewklF1d7AKqU9VAHQH9w1xNK0DQsz1KEDO-WtM2G202E6Q9YNFPCrA4xEC4cxvQMZnRjk4guoEJAdmcq8k04Igv2SDEgsLUZ1ozGpXZNiuQq6yC02U3G8lSJfvEZAqNU-JvU9BD2J0TeXgx8EJxvKkKuJu-biaFbvPNavkqstvWECqE5EUx6zZ9HIEagE5qR1jnGfteVBRigAK0uzgysMHTJ6invUyyAt3qDpxX-Ft6SCJ10FtntwtBGn84DLFwlZ77pA"
-                            alt="Sarah" class="w-14 h-14 rounded-full object-cover">
-                        <div>
-                            <p class="font-bold">Sarah Jenkins</p>
-                            <p class="text-sm text-on-surface-variant">Logistics Director, GlobalTech</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Testimonial 2 -->
-                <div class="glass-card p-8 rounded-3xl" data-aos="fade-up" data-aos-delay="200">
-                    <div class="text-secondary mb-4 flex gap-1"><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span></div>
-                    <p class="text-on-surface mb-6">"Reliability is everything to us. CoreTransit has never missed a
-                        deadline, even with our most complex global supply chain requirements."</p>
-                    <div class="flex items-center gap-4"><img
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr8FTQmoIJULOe4ayg8rH7lUYIxweKzRJZ0Jia7vV29TKiw3LVrVl0l1YFtOvfqi1oZphwSQ-TwjgSvYQd9H3549SXtpTkX1pcz19CVnFslWeiH-bhj2fDYB21TVVijeB-3s0sua0xdQn763uK6LN0B_w2kdTtIq9INV5pcwEEs5p_4O-qhmIK24dhQPCzzc7v_cPFld3CZaJ4_JIJKw4_aAE44m_pLfu0YF3xdT8mjAxe2OsAqIwxerObtgTOnUQ9bSMI4AwPymI"
-                            alt="David" class="w-14 h-14 rounded-full object-cover">
-                        <div>
-                            <p class="font-bold">David Chen</p>
-                            <p class="text-sm text-on-surface-variant">Supply Chain Manager, ASICS</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Testimonial 3 -->
-                <div class="glass-card p-8 rounded-3xl" data-aos="fade-up" data-aos-delay="300">
-                    <div class="text-secondary mb-4 flex gap-1"><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span><span class="material-symbols-outlined"
-                            style="font-variation-settings:'FILL'1">star</span></div>
-                    <p class="text-on-surface mb-6">"The level of personal attention and technology integration they
-                        provide makes them feel like an internal department rather than a vendor."</p>
-                    <div class="flex items-center gap-4"><img
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxG0MHayRvwEgG-MTOvL5PABLfCdULbC2kPS2eTjHyjfNsEaWeNHUiFp7NH2Rvit7XcPWN8Lnlmfl1VddpPVArQRMKzgQRZZYAbU51stlhMSmdog6Dj6STjdbNBI2mB5UX5FrV52hn5YGCZiLr16NAYGnnEY8cR7mHu1wlUzKNk6KJcQuM2N7G8je3cTzk891LkeHShd3_qYriTqolcFUnnG_Bx_v7P5tklo4iCRZEx-mmxWwiZFwYK_1esJtQk0zGAUS2R5ezyyE"
-                            alt="Elena" class="w-14 h-14 rounded-full object-cover">
-                        <div>
-                            <p class="font-bold">Elena Rodriguez</p>
-                            <p class="text-sm text-on-surface-variant">VP of Operations, Samsung</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- CTA SECTION                                -->
-    <!-- ========================================== -->
-    <section class="max-w-7xl mx-auto px-4 mb-24">
-        <div class="relative rounded-[40px] overflow-hidden bg-primary p-12 md:p-24 text-center">
-            <div class="absolute inset-0 opacity-20"><img
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_Vf0eOqk2tRwSuzBGSOnKAywN-9F0FN8adUVae7Z3UKphjsnqCmJw49TUC22PcZ9TYuxIJFDfTZgQ7lcy5kkc8pY9hQ8QyuDYLjH6SstKE3rQNxaEtK8Ga4m8052nNbOqcjBjmCPbwyHPolk49gcjHWnz9H4Dj3OO0rn4oZK0D5ESLFEPqtyATcUVwOibr0JUQk3vNJ7x0Wv_aWX1zFHe5ms1fOxcLXXsKkymBH4aFbjktRsookL0ipz7bTSmb6VHIFmw5xS2qxA"
-                    class="w-full h-full object-cover"></div>
-            <div class="relative z-10">
-                <h2 class="text-white text-4xl md:text-5xl font-extrabold mb-8">Ready to Streamline Your Logistics?</h2>
-                <p class="text-surface-dim text-lg mb-12">Connect with our specialists today and discover how
-                    CoreTransit can accelerate your global growth.</p>
-                <div class="flex flex-col md:flex-row justify-center gap-6"><a href="contact.html"
-                        class="bg-secondary hover:bg-secondary/90 text-white px-10 py-5 rounded-full font-semibold flex items-center justify-center gap-3 shadow-xl transition-all">Get
-                        a Quote <span class="material-symbols-outlined">north_east</span></a><a href="track.html"
-                        class="glass-card text-white px-10 py-5 rounded-full font-semibold flex items-center justify-center gap-3 hover:bg-white/10 transition-all">Track
-                        Shipment <span class="material-symbols-outlined">map</span></a></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- FOOTER (with working newsletter)           -->
-    <!-- ========================================== -->
-    <footer class="bg-on-background py-24">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-20">
-            <div>
-                <div class="text-2xl font-bold text-white mb-8">CoreTransit</div>
-                <p class="text-white/50 mb-8 max-w-xs">Connecting continents and streamlining supply chains through
-                    innovation and reliability since 1996.</p>
-                <div class="flex gap-4"><a href="#"
-                        class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-secondary transition"><i
-                            class="fa-brands fa-linkedin-in"></i></a><a href="#"
-                        class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-secondary transition"><i
-                            class="fa-brands fa-twitter"></i></a><a href="#"
-                        class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-secondary transition"><i
-                            class="fa-brands fa-facebook-f"></i></a></div>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold uppercase tracking-widest text-sm mb-8">Quick Links</h4>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Privacy Policy</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Terms of Service</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Global Network</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Careers</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold uppercase tracking-widest text-sm mb-8">Support</h4>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Help Center</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Shipping Guide</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Tax &amp; Customs</a></li>
-                    <li><a href="contact.html" class="text-white/50 hover:text-white transition">Contact Us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold uppercase tracking-widest text-sm mb-8">Newsletter</h4>
-                <p class="text-white/50 mb-6">Stay updated with our latest logistics insights.</p>
-                <div class="relative"><input type="email" id="newsletter-email"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-1 focus:ring-secondary outline-none"
-                        placeholder="Email address"><button id="newsletter-btn"
-                        class="absolute right-2 top-2 bg-secondary text-white p-2 rounded-lg hover:bg-secondary/80 transition"><span
-                            class="material-symbols-outlined">send</span></button></div>
-                <div id="newsletter-msg" class="text-green-400 text-sm mt-2 hidden"></div>
-            </div>
-        </div>
-        <div
-            class="max-w-7xl mx-auto px-4 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-white/30 text-sm">© 2025 CoreTransit Logistics. All rights reserved.</p><a href="#top"
-                class="flex items-center gap-2 text-white font-semibold hover:text-secondary transition">Back to top
-                <span class="material-symbols-outlined">arrow_upward</span></a>
-        </div>
-    </footer>
-
-    <!-- Back to Top Button -->
-    <button id="back-to-top"
-        class="back-to-top fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-secondary to-secondary/80 text-white rounded-full shadow-xl hover:shadow-2xl transition-all flex items-center justify-center text-xl z-40 border-2 border-white/30"><i
-            class="fa-solid fa-arrow-up"></i></button>
-
-    <!-- ========================================== -->
-    <!-- SCRIPTS (AOS, tracking, newsletter, stats) -->
-    <!-- ========================================== -->
-    <script src="js/config.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({ duration: 800, once: true, offset: 100 });
-
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); document.body.classList.toggle('mobile-menu-open'); });
-            document.addEventListener('click', (e) => { if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); document.body.classList.remove('mobile-menu-open'); } });
+  // Stats counter animation
+  function animateStats() {
+    const stats = document.querySelectorAll('.stat-number');
+    if (!stats.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseFloat(el.getAttribute('data-value'));
+          let current = 0;
+          const increment = target / (2000 / 16);
+          const update = () => {
+            current += increment;
+            if (current < target) { el.textContent = Math.floor(current); requestAnimationFrame(update); }
+            else { el.textContent = target; }
+          };
+          requestAnimationFrame(update);
+          observer.unobserve(el);
         }
+      });
+    }, { threshold: 0.5 });
+    stats.forEach(stat => observer.observe(stat));
+  }
+  setTimeout(animateStats, 500);
 
-        // Back to top button
-        const backToTop = document.getElementById('back-to-top');
-        window.addEventListener('scroll', () => { if (window.scrollY > 500) backToTop.classList.add('visible'); else backToTop.classList.remove('visible'); });
-        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-        // Hero tracking redirect
-        const heroInput = document.getElementById('hero-track-input');
-        const heroBtn = document.getElementById('hero-track-btn');
-        if (heroBtn && heroInput) {
-            heroBtn.addEventListener('click', () => { if (heroInput.value.trim()) sessionStorage.setItem('prefill_tracking_id', heroInput.value.trim()); window.location.href = 'track.html'; });
-            heroInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') heroBtn.click(); });
-        }
-
-        // Stats counter animation
-        function animateStatsOnScroll() {
-            const stats = document.querySelectorAll('.stat-number');
-            if (!stats.length) return;
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const el = entry.target;
-                        const target = parseFloat(el.getAttribute('data-value'));
-                        let current = 0;
-                        const increment = target / (2000 / 16);
-                        const update = () => {
-                            current += increment;
-                            if (current < target) { el.textContent = Math.floor(current); requestAnimationFrame(update); }
-                            else { el.textContent = target; }
-                        };
-                        requestAnimationFrame(update);
-                        observer.unobserve(el);
-                    }
-                });
-            }, { threshold: 0.5 });
-            stats.forEach(stat => observer.observe(stat));
-        }
-        setTimeout(animateStatsOnScroll, 500);
-
-        // Newsletter subscription (Supabase or mock)
-        const newsletterBtn = document.getElementById('newsletter-btn');
-        const newsletterEmail = document.getElementById('newsletter-email');
-        const newsletterMsg = document.getElementById('newsletter-msg');
-        if (newsletterBtn && newsletterEmail) {
-            newsletterBtn.addEventListener('click', async () => {
-                const email = newsletterEmail.value.trim();
-                if (!email || !/^\S+@\S+\.\S+$/.test(email)) { newsletterMsg.textContent = 'Please enter a valid email.'; newsletterMsg.classList.remove('hidden'); newsletterMsg.classList.add('text-red-400'); setTimeout(() => newsletterMsg.classList.add('hidden'), 3000); return; }
-                let success = false;
-                if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-                    try {
-                        const { error } = await supabaseClient.from('newsletter_subscribers').insert([{ email, subscribed_at: new Date() }]);
-                        if (!error) success = true;
-                    } catch (e) { console.warn(e); }
-                }
-                if (!success) { console.log('Mock subscription'); success = true; }
-                if (success) { newsletterEmail.value = ''; newsletterMsg.textContent = 'Subscribed successfully!'; newsletterMsg.classList.remove('hidden', 'text-red-400'); newsletterMsg.classList.add('text-green-400'); setTimeout(() => newsletterMsg.classList.add('hidden'), 3000); }
-                else { newsletterMsg.textContent = 'Subscription failed. Try again.'; newsletterMsg.classList.remove('hidden'); newsletterMsg.classList.add('text-red-400'); setTimeout(() => newsletterMsg.classList.add('hidden'), 3000); }
-            });
-        }
-    </script>
-    <script src="js/main.js"></script>
+  // Newsletter subscription (Supabase or mock)
+  const newsletterBtn = document.getElementById('newsletter-btn');
+  const newsletterEmail = document.getElementById('newsletter-email');
+  const newsletterMsg = document.getElementById('newsletter-msg');
+  if (newsletterBtn && newsletterEmail) {
+    newsletterBtn.addEventListener('click', async () => {
+      const email = newsletterEmail.value.trim();
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+        newsletterMsg.textContent = 'Valid email required.';
+        newsletterMsg.classList.remove('hidden');
+        newsletterMsg.classList.add('text-red-400');
+        setTimeout(() => newsletterMsg.classList.add('hidden'), 3000);
+        return;
+      }
+      let success = false;
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from('newsletter_subscribers').insert([{ email, subscribed_at: new Date() }]);
+          if (!error) success = true;
+        } catch (e) { console.warn(e); }
+      }
+      if (!success) { console.log('Mock subscription'); success = true; }
+      if (success) {
+        newsletterEmail.value = '';
+        newsletterMsg.textContent = 'Subscribed!';
+        newsletterMsg.classList.remove('hidden', 'text-red-400');
+        newsletterMsg.classList.add('text-green-400');
+        setTimeout(() => newsletterMsg.classList.add('hidden'), 3000);
+      } else {
+        newsletterMsg.textContent = 'Subscription failed.';
+        newsletterMsg.classList.remove('hidden');
+        newsletterMsg.classList.add('text-red-400');
+        setTimeout(() => newsletterMsg.classList.add('hidden'), 3000);
+      }
+    });
+  }
+</script>
 </body>
-
 </html>

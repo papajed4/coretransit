@@ -1,598 +1,378 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Our Services | CoreTransit Logistics</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Our Services | CoreTransit Logistics</title>
 
-    <!-- Google Fonts + Tailwind + AOS + FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
 
-    <!-- Supabase SDK (for newsletter) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts + Tailwind + Icons + AOS + Supabase -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "on-tertiary": "#ffffff",
-                        "inverse-surface": "#213145",
-                        "surface-dim": "#cbdbf5",
-                        "on-primary-fixed": "#00164e",
-                        "surface-tint": "#4059aa",
-                        "surface-container-low": "#eff4ff",
-                        "inverse-on-surface": "#eaf1ff",
-                        "on-tertiary-fixed-variant": "#004c6e",
-                        "background": "#f8f9ff",
-                        "tertiary": "#002e44",
-                        "surface-container": "#e5eeff",
-                        "inverse-primary": "#b6c4ff",
-                        "primary-fixed-dim": "#b6c4ff",
-                        "on-error": "#ffffff",
-                        "primary": "#00236f",
-                        "outline": "#757682",
-                        "on-tertiary-fixed": "#001e2f",
-                        "on-tertiary-container": "#36b6fb",
-                        "on-primary": "#ffffff",
-                        "secondary": "#9d4300",
-                        "surface-variant": "#d3e4fe",
-                        "tertiary-container": "#004565",
-                        "on-surface-variant": "#444651",
-                        "on-background": "#0b1c30",
-                        "outline-variant": "#c5c5d3",
-                        "on-secondary-container": "#5c2400",
-                        "on-secondary-fixed": "#341100",
-                        "surface-container-highest": "#d3e4fe",
-                        "on-surface": "#0b1c30",
-                        "secondary-container": "#fd761a",
-                        "tertiary-fixed-dim": "#89ceff",
-                        "secondary-fixed-dim": "#ffb690",
-                        "surface-bright": "#f8f9ff",
-                        "on-primary-fixed-variant": "#264191",
-                        "primary-fixed": "#dce1ff",
-                        "primary-container": "#1e3a8a",
-                        "tertiary-fixed": "#c9e6ff",
-                        "on-secondary": "#ffffff",
-                        "on-primary-container": "#90a8ff",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#dce9ff",
-                        "surface-container-lowest": "#ffffff",
-                        "on-error-container": "#93000a",
-                        "surface": "#f8f9ff",
-                        "error": "#ba1a1a",
-                        "on-secondary-fixed-variant": "#783200",
-                        "secondary-fixed": "#ffdbca"
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
+  <!-- Our custom design system -->
+  <link rel="stylesheet" href="css/design-system.css">
 
-    <style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-primary-gradient {
-            background: linear-gradient(135deg, #36b6fb 0%, #00236f 100%);
-        }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-
-        .back-to-top {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        @media (max-width: 768px) {
-            .back-to-top {
-                bottom: 16px !important;
-                right: 16px !important;
-                width: 48px !important;
-                height: 48px !important;
-            }
-        }
-
-        #mobile-menu {
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-open {
-            overflow: hidden;
-        }
-
-        .service-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 60px -15px rgba(0, 35, 111, 0.25);
-        }
-    </style>
+  <style>
+    /* Additional hover effect for service cards */
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+  </style>
 </head>
+<body class="bg-white">
 
-<body class="bg-background text-on-background font-sans overflow-x-hidden">
+<!-- ==================== NAVIGATION (identical to other pages) ==================== -->
+<header class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+  <nav class="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
+    <div class="text-2xl font-extrabold text-black">
+      Core<span class="text-[#d40511]">Transit</span>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a href="index.html" class="text-gray-700 hover:text-black transition">Home</a>
+      <a href="about.html" class="text-gray-700 hover:text-black transition">About</a>
+      <a href="services.html" class="font-semibold text-black border-b-2 border-[#ffcc00] pb-1">Services</a>
+      <a href="contact.html" class="text-gray-700 hover:text-black transition">Contact</a>
+    </div>
+    <div class="hidden md:block">
+      <a href="track.html" class="bg-[#ffcc00] text-black px-6 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 shadow-md hover:shadow-lg transition">
+        Track Shipment →
+      </a>
+    </div>
+    <button id="mobile-menu-btn" class="md:hidden text-2xl"><i class="fa-solid fa-bars"></i></button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 rounded-2xl mt-2 p-4 shadow-xl">
+    <a href="index.html" class="block py-3">Home</a>
+    <a href="about.html" class="block py-3">About</a>
+    <a href="services.html" class="block py-3 font-bold">Services</a>
+    <a href="contact.html" class="block py-3">Contact</a>
+    <a href="track.html" class="block mt-3 bg-[#ffcc00] text-center py-3 rounded-full font-bold">Track Shipment</a>
+    <a href="dashboard.html" class="block mt-2 text-center text-sm text-gray-500">Admin</a>
+  </div>
+</header>
 
-    <!-- ========================================== -->
-    <!-- PREMIUM NAVIGATION (with mobile menu)      -->
-    <!-- ========================================== -->
-    <header
-        class="fixed w-full z-50 bg-white/60 backdrop-blur-md border-b border-white/20 shadow-sm transition-all duration-500"
-        id="navbar">
-        <nav class="flex justify-between items-center px-4 md:px-8 py-4 max-w-7xl mx-auto">
-            <div class="text-2xl font-bold text-primary dark:text-on-primary-container">
-                Core<span class="text-secondary">Transit</span>
-            </div>
+<!-- ==================== HERO SECTION ==================== -->
+<section class="relative pt-32 pb-20 bg-gradient-to-b from-[#ffcc00]/10 to-transparent">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <span class="inline-block bg-white/80 rounded-full px-5 py-2 text-sm font-bold text-[#d40511] shadow-sm">What We Offer</span>
+    <h1 class="text-5xl md:text-7xl font-extrabold mt-6">Comprehensive <span class="text-[#d40511]">Solutions</span></h1>
+    <p class="text-gray-600 text-xl max-w-3xl mx-auto mt-4">Tailored logistics strategies to optimise your entire supply chain lifecycle.</p>
+  </div>
+</section>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center gap-8">
-                <a href="index.html"
-                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Home</a>
-                <a href="about.html"
-                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">About</a>
-                <a href="services.html"
-                    class="text-secondary border-b-2 border-secondary font-semibold text-sm uppercase tracking-wider">Services</a>
-                <a href="contact.html"
-                    class="text-on-surface hover:text-secondary transition-colors font-semibold text-sm uppercase tracking-wider">Contact</a>
-            </div>
+<!-- ==================== MAIN SERVICES GRID (6 services) ==================== -->
+<section class="py-20">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <!-- Air Freight -->
+    <div class="card service-card" data-aos="fade-up">
+      <div class="w-16 h-16 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-3xl mb-6">
+        <i class="fa-solid fa-plane-departure"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Air Freight</h3>
+      <p class="text-gray-600 mb-4 leading-relaxed">Expedited global shipping for time‑sensitive cargo. Partnerships with major airlines ensure priority boarding and rapid transit.</p>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> 24‑48 hour global delivery</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Real‑time flight tracking</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Door‑to‑door service</li>
+      </ul>
+      <a href="contact.html" class="inline-flex items-center gap-2 text-[#d40511] font-semibold hover:gap-3 transition-all">Get Quote →</a>
+    </div>
 
-            <!-- Desktop Track Button -->
-            <div class="hidden md:flex items-center gap-3">
-                <a href="track.html"
-                    class="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 transition-all shadow-md hover:shadow-lg">
-                    Track Shipment
-                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-                </a>
-            </div>
+    <!-- Ocean Freight -->
+    <div class="card service-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="w-16 h-16 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-3xl mb-6">
+        <i class="fa-solid fa-ship"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Ocean Freight</h3>
+      <p class="text-gray-600 mb-4 leading-relaxed">Cost‑effective FCL and LCL shipping solutions for large volume cargo across major international trade lanes.</p>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> FCL & LCL options</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Port‑to‑port & door‑to‑door</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Competitive rates</li>
+      </ul>
+      <a href="contact.html" class="inline-flex items-center gap-2 text-[#d40511] font-semibold hover:gap-3 transition-all">Get Quote →</a>
+    </div>
 
-            <!-- Mobile Hamburger Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-primary text-2xl focus:outline-none">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </nav>
+    <!-- Road Transport -->
+    <div class="card service-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="w-16 h-16 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-3xl mb-6">
+        <i class="fa-solid fa-truck-fast"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Road Transport</h3>
+      <p class="text-gray-600 mb-4 leading-relaxed">Extensive domestic and cross‑border trucking networks. From standard pallets to specialised heavy haulage.</p>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> LTL & FTL services</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Temperature‑controlled</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> 24/7 tracking</li>
+      </ul>
+      <a href="contact.html" class="inline-flex items-center gap-2 text-[#d40511] font-semibold hover:gap-3 transition-all">Get Quote →</a>
+    </div>
 
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 rounded-2xl mt-2 p-4 shadow-xl">
-            <a href="index.html"
-                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Home</a>
-            <a href="about.html"
-                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">About</a>
-            <a href="services.html"
-                class="block py-3 px-4 text-primary font-semibold rounded-lg bg-white/20">Services</a>
-            <a href="contact.html"
-                class="block py-3 px-4 text-on-surface hover:bg-white/10 rounded-lg transition">Contact</a>
-            <a href="track.html"
-                class="block mt-3 bg-primary text-white px-6 py-3 rounded-full font-semibold text-center">Track
-                Shipment</a>
+    <!-- Contract Logistics -->
+    <div class="card service-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="w-16 h-16 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-3xl mb-6">
+        <i class="fa-solid fa-warehouse"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Contract Logistics</h3>
+      <p class="text-gray-600 mb-4 leading-relaxed">Secure warehousing, inventory management, pick‑and‑pack, and distribution centre operations globally.</p>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> 500K+ sq ft warehouse space</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Inventory management system</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Pick & pack services</li>
+      </ul>
+      <a href="contact.html" class="inline-flex items-center gap-2 text-[#d40511] font-semibold hover:gap-3 transition-all">Get Quote →</a>
+    </div>
+
+    <!-- Customs Brokerage -->
+    <div class="card service-card" data-aos="fade-up" data-aos-delay="400">
+      <div class="w-16 h-16 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-3xl mb-6">
+        <i class="fa-solid fa-file-contract"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Customs Brokerage</h3>
+      <p class="text-gray-600 mb-4 leading-relaxed">Navigating complex international trade regulations to ensure seamless, compliant, and penalty‑free border crossings.</p>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Licensed customs brokers</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Duty & tax optimisation</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Compliance guarantee</li>
+      </ul>
+      <a href="contact.html" class="inline-flex items-center gap-2 text-[#d40511] font-semibold hover:gap-3 transition-all">Get Quote →</a>
+    </div>
+
+    <!-- Cargo Insurance -->
+    <div class="card service-card" data-aos="fade-up" data-aos-delay="500">
+      <div class="w-16 h-16 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-3xl mb-6">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Cargo Insurance</h3>
+      <p class="text-gray-600 mb-4 leading-relaxed">Comprehensive risk management and coverage options to protect the financial value of your goods in transit.</p>
+      <ul class="space-y-2 mb-6 text-sm">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> All‑risk coverage</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Competitive premiums</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check-circle text-[#d40511] text-sm"></i> Fast claims processing</li>
+      </ul>
+      <a href="contact.html" class="inline-flex items-center gap-2 text-[#d40511] font-semibold hover:gap-3 transition-all">Get Quote →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== INDUSTRY‑SPECIFIC SOLUTIONS ==================== -->
+<section class="py-20 bg-[#f2f2f2]">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="h-px w-12 bg-gradient-to-r from-transparent to-[#d40511]"></div>
+        <span class="text-[#d40511] font-bold text-xs uppercase tracking-widest">Specialized</span>
+        <div class="h-px w-12 bg-gradient-to-l from-transparent to-[#d40511]"></div>
+      </div>
+      <h2 class="text-4xl md:text-5xl font-extrabold">Industry‑Specific <span class="text-[#d40511]">Solutions</span></h2>
+      <p class="text-gray-600 text-lg mt-4 max-w-2xl mx-auto">Tailored logistics strategies for your unique business needs</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Healthcare -->
+      <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-right">
+        <div class="w-14 h-14 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-xl shrink-0">
+          <i class="fa-solid fa-syringe"></i>
         </div>
-    </header>
-
-    <!-- ========================================== -->
-    <!-- HERO SECTION (Services)                    -->
-    <!-- ========================================== -->
-    <section class="relative pt-32 pb-20 bg-gradient-to-b from-primary/10 to-transparent">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="inline-flex items-center glass-card rounded-full px-5 py-2 mb-6 border border-white/30 shadow-lg"
-                data-aos="fade-down">
-                <i class="fa-solid fa-boxes-packing text-secondary mr-2 text-sm"></i>
-                <span class="text-primary font-semibold text-xs uppercase tracking-wider">What We Offer</span>
-            </div>
-            <h1 class="text-4xl md:text-6xl font-extrabold text-primary mb-6" data-aos="fade-up">Comprehensive <span
-                    class="text-secondary">Solutions</span></h1>
-            <p class="text-xl text-on-surface-variant max-w-3xl mx-auto leading-relaxed" data-aos="fade-up"
-                data-aos-delay="100">
-                Tailored logistics strategies to optimize your entire supply chain lifecycle.
-            </p>
+        <div>
+          <h4 class="text-xl font-bold mb-2">Healthcare & Pharma</h4>
+          <p class="text-gray-600 text-sm">Temperature‑controlled shipping, GDP compliance, and secure handling for medical devices and pharmaceuticals.</p>
         </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- MAIN SERVICES GRID (6 services)            -->
-    <!-- ========================================== -->
-    <section class="py-20 bg-background">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            <!-- Air Freight -->
-            <div class="glass-card p-8 rounded-3xl service-card" data-aos="fade-up" data-aos-delay="100">
-                <div
-                    class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary text-3xl mb-6">
-                    <i class="fa-solid fa-plane-departure"></i></div>
-                <h3 class="text-2xl font-bold text-primary mb-4">Air Freight</h3>
-                <p class="text-on-surface-variant mb-4 leading-relaxed">Expedited global shipping for time-sensitive
-                    cargo. Partnerships with major airlines ensure priority boarding and rapid transit.</p>
-                <ul class="space-y-2 mb-6 text-sm">
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> 24-48 hour
-                        global delivery</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Real-time
-                        flight tracking</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Door-to-door
-                        service</li>
-                </ul>
-                <a href="contact.html"
-                    class="inline-flex items-center gap-2 text-secondary font-semibold hover:gap-3 transition-all">Get
-                    Quote <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
-            </div>
-
-            <!-- Ocean Freight -->
-            <div class="glass-card p-8 rounded-3xl service-card" data-aos="fade-up" data-aos-delay="200">
-                <div
-                    class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary text-3xl mb-6">
-                    <i class="fa-solid fa-ship"></i></div>
-                <h3 class="text-2xl font-bold text-primary mb-4">Ocean Freight</h3>
-                <p class="text-on-surface-variant mb-4 leading-relaxed">Cost-effective FCL and LCL shipping solutions
-                    for large volume cargo across major international trade lanes.</p>
-                <ul class="space-y-2 mb-6 text-sm">
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> FCL &amp; LCL
-                        options</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Port-to-port
-                        &amp; door-to-door</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Competitive
-                        rates</li>
-                </ul>
-                <a href="contact.html"
-                    class="inline-flex items-center gap-2 text-secondary font-semibold hover:gap-3 transition-all">Get
-                    Quote <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
-            </div>
-
-            <!-- Road Transport -->
-            <div class="glass-card p-8 rounded-3xl service-card" data-aos="fade-up" data-aos-delay="300">
-                <div
-                    class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary text-3xl mb-6">
-                    <i class="fa-solid fa-truck-fast"></i></div>
-                <h3 class="text-2xl font-bold text-primary mb-4">Road Transport</h3>
-                <p class="text-on-surface-variant mb-4 leading-relaxed">Extensive domestic and cross-border trucking
-                    networks. From standard pallets to specialized heavy haulage.</p>
-                <ul class="space-y-2 mb-6 text-sm">
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> LTL &amp; FTL
-                        services</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span>
-                        Temperature-controlled</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> 24/7 tracking
-                    </li>
-                </ul>
-                <a href="contact.html"
-                    class="inline-flex items-center gap-2 text-secondary font-semibold hover:gap-3 transition-all">Get
-                    Quote <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
-            </div>
-
-            <!-- Contract Logistics -->
-            <div class="glass-card p-8 rounded-3xl service-card" data-aos="fade-up" data-aos-delay="400">
-                <div
-                    class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary text-3xl mb-6">
-                    <i class="fa-solid fa-warehouse"></i></div>
-                <h3 class="text-2xl font-bold text-primary mb-4">Contract Logistics</h3>
-                <p class="text-on-surface-variant mb-4 leading-relaxed">Secure warehousing, inventory management,
-                    pick-and-pack, and distribution center operations globally.</p>
-                <ul class="space-y-2 mb-6 text-sm">
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> 500K+ sq ft
-                        warehouse space</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Inventory
-                        management system</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Pick &amp;
-                        pack services</li>
-                </ul>
-                <a href="contact.html"
-                    class="inline-flex items-center gap-2 text-secondary font-semibold hover:gap-3 transition-all">Get
-                    Quote <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
-            </div>
-
-            <!-- Customs Brokerage -->
-            <div class="glass-card p-8 rounded-3xl service-card" data-aos="fade-up" data-aos-delay="500">
-                <div
-                    class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary text-3xl mb-6">
-                    <i class="fa-solid fa-file-contract"></i></div>
-                <h3 class="text-2xl font-bold text-primary mb-4">Customs Brokerage</h3>
-                <p class="text-on-surface-variant mb-4 leading-relaxed">Navigating complex international trade
-                    regulations to ensure seamless, compliant, and penalty-free border crossings.</p>
-                <ul class="space-y-2 mb-6 text-sm">
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Licensed
-                        customs brokers</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Duty &amp;
-                        tax optimization</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Compliance
-                        guarantee</li>
-                </ul>
-                <a href="contact.html"
-                    class="inline-flex items-center gap-2 text-secondary font-semibold hover:gap-3 transition-all">Get
-                    Quote <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
-            </div>
-
-            <!-- Cargo Insurance -->
-            <div class="glass-card p-8 rounded-3xl service-card" data-aos="fade-up" data-aos-delay="600">
-                <div
-                    class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary text-3xl mb-6">
-                    <i class="fa-solid fa-shield-halved"></i></div>
-                <h3 class="text-2xl font-bold text-primary mb-4">Cargo Insurance</h3>
-                <p class="text-on-surface-variant mb-4 leading-relaxed">Comprehensive risk management and coverage
-                    options to protect the financial value of your goods in transit.</p>
-                <ul class="space-y-2 mb-6 text-sm">
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> All-risk
-                        coverage</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Competitive
-                        premiums</li>
-                    <li class="flex items-center gap-2"><span
-                            class="material-symbols-outlined text-secondary text-base">check_circle</span> Fast claims
-                        processing</li>
-                </ul>
-                <a href="contact.html"
-                    class="inline-flex items-center gap-2 text-secondary font-semibold hover:gap-3 transition-all">Get
-                    Quote <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
-            </div>
+      </div>
+      <!-- Automotive -->
+      <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-left">
+        <div class="w-14 h-14 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-xl shrink-0">
+          <i class="fa-solid fa-car"></i>
         </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- INDUSTRY-SPECIFIC SOLUTIONS                -->
-    <!-- ========================================== -->
-    <section class="py-20 bg-surface-container-low">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <div class="flex items-center justify-center gap-3 mb-4">
-                    <div class="h-px w-12 bg-gradient-to-r from-transparent to-secondary"></div>
-                    <span class="text-secondary font-bold text-xs uppercase tracking-widest">Specialized</span>
-                    <div class="h-px w-12 bg-gradient-to-l from-transparent to-secondary"></div>
-                </div>
-                <h2 class="text-4xl md:text-5xl font-extrabold text-primary mb-4">Industry-Specific <span
-                        class="text-secondary">Solutions</span></h2>
-                <p class="text-on-surface-variant max-w-2xl mx-auto">Tailored logistics strategies for your unique
-                    business needs</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Healthcare -->
-                <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-right">
-                    <div
-                        class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary text-xl shrink-0">
-                        <i class="fa-solid fa-syringe"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-primary mb-2">Healthcare &amp; Pharma</h4>
-                        <p class="text-on-surface-variant text-sm">Temperature-controlled shipping, GDP compliance, and
-                            secure handling for medical devices and pharmaceuticals.</p>
-                    </div>
-                </div>
-                <!-- Automotive -->
-                <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-left">
-                    <div
-                        class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary text-xl shrink-0">
-                        <i class="fa-solid fa-car"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-primary mb-2">Automotive</h4>
-                        <p class="text-on-surface-variant text-sm">Just-in-time delivery, parts sequencing, and finished
-                            vehicle logistics for automotive manufacturers.</p>
-                    </div>
-                </div>
-                <!-- Retail & E‑commerce -->
-                <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-right"
-                    data-aos-delay="100">
-                    <div
-                        class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary text-xl shrink-0">
-                        <i class="fa-solid fa-shirt"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-primary mb-2">Retail &amp; E‑commerce</h4>
-                        <p class="text-on-surface-variant text-sm">Omnichannel fulfillment, returns management, and peak
-                            season scalability for retailers.</p>
-                    </div>
-                </div>
-                <!-- Technology -->
-                <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-left"
-                    data-aos-delay="100">
-                    <div
-                        class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary text-xl shrink-0">
-                        <i class="fa-solid fa-microchip"></i></div>
-                    <div>
-                        <h4 class="text-xl font-bold text-primary mb-2">Technology</h4>
-                        <p class="text-on-surface-variant text-sm">Secure transport for high-value electronics,
-                            white-glove service, and reverse logistics.</p>
-                    </div>
-                </div>
-            </div>
+        <div>
+          <h4 class="text-xl font-bold mb-2">Automotive</h4>
+          <p class="text-gray-600 text-sm">Just‑in‑time delivery, parts sequencing, and finished vehicle logistics for automotive manufacturers.</p>
         </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- 4‑STEP PROCESS                            -->
-    <!-- ========================================== -->
-    <section class="py-20 bg-gradient-to-r from-primary to-primary/90 text-white">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">How Our <span
-                    class="text-secondary">Process Works</span></h2>
-            <p class="text-white/80 text-lg max-w-2xl mx-auto mb-12" data-aos="fade-up" data-aos-delay="100">Simple,
-                transparent, and efficient – from quote to delivery</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8" data-aos="fade-up" data-aos-delay="200">
-                <div>
-                    <div
-                        class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
-                        <span class="material-symbols-outlined">calculate</span></div>
-                    <h4 class="font-bold text-lg mb-2">1. Get Quote</h4>
-                    <p class="text-white/60 text-sm">Request a customized quote based on your specific needs</p>
-                </div>
-                <div>
-                    <div
-                        class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
-                        <span class="material-symbols-outlined">calendar_month</span></div>
-                    <h4 class="font-bold text-lg mb-2">2. Schedule</h4>
-                    <p class="text-white/60 text-sm">Book pickup at your convenience with flexible scheduling</p>
-                </div>
-                <div>
-                    <div
-                        class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
-                        <span class="material-symbols-outlined">local_shipping</span></div>
-                    <h4 class="font-bold text-lg mb-2">3. Ship</h4>
-                    <p class="text-white/60 text-sm">Your cargo moves through our optimized global network</p>
-                </div>
-                <div>
-                    <div
-                        class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
-                        <span class="material-symbols-outlined">check_circle</span></div>
-                    <h4 class="font-bold text-lg mb-2">4. Deliver</h4>
-                    <p class="text-white/60 text-sm">On‑time delivery with real‑time updates and confirmation</p>
-                </div>
-            </div>
+      </div>
+      <!-- Retail & E‑commerce -->
+      <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-right" data-aos-delay="100">
+        <div class="w-14 h-14 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-xl shrink-0">
+          <i class="fa-solid fa-shirt"></i>
         </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- CTA SECTION                                -->
-    <!-- ========================================== -->
-    <section class="py-20 bg-background text-center">
-        <div class="max-w-4xl mx-auto px-4">
-            <h3 class="text-3xl md:text-4xl font-bold text-primary mb-4" data-aos="fade-up">Ready to optimize your
-                supply chain?</h3>
-            <p class="text-on-surface-variant text-lg mb-8" data-aos="fade-up" data-aos-delay="100">Get in touch with
-                our logistics experts for a customized solution.</p>
-            <a href="contact.html"
-                class="bg-secondary hover:bg-secondary/90 text-white px-10 py-5 rounded-full font-semibold text-lg inline-flex items-center gap-3 shadow-xl transition-all active:scale-95"
-                data-aos="fade-up" data-aos-delay="200">
-                Contact Our Team <span class="material-symbols-outlined">arrow_forward</span>
-            </a>
+        <div>
+          <h4 class="text-xl font-bold mb-2">Retail & E‑commerce</h4>
+          <p class="text-gray-600 text-sm">Omnichannel fulfillment, returns management, and peak season scalability for retailers.</p>
         </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- FOOTER (with working newsletter)           -->
-    <!-- ========================================== -->
-    <footer class="bg-on-background py-24">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-20">
-            <div>
-                <div class="text-2xl font-bold text-white mb-8">CoreTransit</div>
-                <p class="text-white/50 mb-8 max-w-xs">Connecting continents and streamlining supply chains through
-                    innovation and reliability since 1996.</p>
-                <div class="flex gap-4"><a href="#"
-                        class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-secondary transition"><i
-                            class="fa-brands fa-linkedin-in"></i></a><a href="#"
-                        class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-secondary transition"><i
-                            class="fa-brands fa-twitter"></i></a><a href="#"
-                        class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-secondary transition"><i
-                            class="fa-brands fa-facebook-f"></i></a></div>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold uppercase tracking-widest text-sm mb-8">Quick Links</h4>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Privacy Policy</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Terms of Service</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Global Network</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Careers</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold uppercase tracking-widest text-sm mb-8">Support</h4>
-                <ul class="space-y-4">
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Help Center</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Shipping Guide</a></li>
-                    <li><a href="#" class="text-white/50 hover:text-white transition">Tax &amp; Customs</a></li>
-                    <li><a href="contact.html" class="text-white/50 hover:text-white transition">Contact Us</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-semibold uppercase tracking-widest text-sm mb-8">Newsletter</h4>
-                <p class="text-white/50 mb-6">Stay updated with our latest logistics insights.</p>
-                <div class="relative"><input type="email" id="newsletter-email"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:ring-1 focus:ring-secondary outline-none"
-                        placeholder="Email address"><button id="newsletter-btn"
-                        class="absolute right-2 top-2 bg-secondary text-white p-2 rounded-lg hover:bg-secondary/80 transition"><span
-                            class="material-symbols-outlined">send</span></button></div>
-                <div id="newsletter-msg" class="text-green-400 text-sm mt-2 hidden"></div>
-            </div>
+      </div>
+      <!-- Technology -->
+      <div class="glass-card p-6 rounded-2xl flex gap-5 items-start" data-aos="fade-left" data-aos-delay="100">
+        <div class="w-14 h-14 bg-[#ffcc00]/20 rounded-2xl flex items-center justify-center text-[#d40511] text-xl shrink-0">
+          <i class="fa-solid fa-microchip"></i>
         </div>
-        <div
-            class="max-w-7xl mx-auto px-4 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-white/30 text-sm">© 2025 CoreTransit Logistics. All rights reserved.</p><a href="#top"
-                class="flex items-center gap-2 text-white font-semibold hover:text-secondary transition">Back to top
-                <span class="material-symbols-outlined">arrow_upward</span></a>
+        <div>
+          <h4 class="text-xl font-bold mb-2">Technology</h4>
+          <p class="text-gray-600 text-sm">Secure transport for high‑value electronics, white‑glove service, and reverse logistics.</p>
         </div>
-    </footer>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Back to Top Button -->
-    <button id="back-to-top"
-        class="back-to-top fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-secondary to-secondary/80 text-white rounded-full shadow-xl hover:shadow-2xl transition-all flex items-center justify-center text-xl z-40 border-2 border-white/30"><i
-            class="fa-solid fa-arrow-up"></i></button>
+<!-- ==================== 4‑STEP PROCESS ==================== -->
+<section class="py-20 bg-gradient-to-r from-[#d40511] to-[#a0040e] text-white">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">How Our <span class="text-[#ffcc00]">Process Works</span></h2>
+    <p class="text-white/80 text-lg max-w-2xl mx-auto mb-12" data-aos="fade-up" data-aos-delay="100">Simple, transparent, and efficient – from quote to delivery</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8" data-aos="fade-up" data-aos-delay="200">
+      <div>
+        <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
+          <i class="fa-solid fa-calculator"></i>
+        </div>
+        <h4 class="font-bold text-lg mb-2">1. Get Quote</h4>
+        <p class="text-white/60 text-sm">Request a customised quote based on your specific needs</p>
+      </div>
+      <div>
+        <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
+          <i class="fa-solid fa-calendar-alt"></i>
+        </div>
+        <h4 class="font-bold text-lg mb-2">2. Schedule</h4>
+        <p class="text-white/60 text-sm">Book pickup at your convenience with flexible scheduling</p>
+      </div>
+      <div>
+        <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
+          <i class="fa-solid fa-shipping-fast"></i>
+        </div>
+        <h4 class="font-bold text-lg mb-2">3. Ship</h4>
+        <p class="text-white/60 text-sm">Your cargo moves through our optimised global network</p>
+      </div>
+      <div>
+        <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-white/20">
+          <i class="fa-solid fa-check-circle"></i>
+        </div>
+        <h4 class="font-bold text-lg mb-2">4. Deliver</h4>
+        <p class="text-white/60 text-sm">On‑time delivery with real‑time updates and confirmation</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- ========================================== -->
-    <!-- SCRIPTS                                    -->
-    <!-- ========================================== -->
-    <script src="js/config.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({ duration: 800, once: true, offset: 100 });
+<!-- ==================== CALL TO ACTION ==================== -->
+<section class="py-20 text-center">
+  <div class="max-w-4xl mx-auto px-4">
+    <h3 class="text-3xl md:text-4xl font-bold mb-4" data-aos="fade-up">Ready to optimise your supply chain?</h3>
+    <p class="text-gray-600 text-lg mb-8" data-aos="fade-up" data-aos-delay="100">Get in touch with our logistics experts for a customised solution.</p>
+    <a href="contact.html" class="btn-secondary inline-flex items-center gap-3" data-aos="fade-up" data-aos-delay="200">
+      Contact Our Team →
+    </a>
+  </div>
+</section>
 
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); document.body.classList.toggle('mobile-menu-open'); });
-            document.addEventListener('click', (e) => { if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); document.body.classList.remove('mobile-menu-open'); } });
-        }
+<!-- ==================== FOOTER (identical to other pages) ==================== -->
+<footer class="bg-black text-white py-16">
+  <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8">
+    <div>
+      <div class="text-2xl font-bold">Core<span class="text-[#ffcc00]">Transit</span></div>
+      <p class="text-gray-400 mt-4">Connecting continents since 1996.</p>
+      <div class="flex gap-4 mt-6">
+        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-facebook-f"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4 class="font-bold mb-4">Quick Links</h4>
+      <ul class="space-y-2 text-gray-400">
+        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+        <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+        <li><a href="#" class="hover:text-white">Global Network</a></li>
+        <li><a href="#" class="hover:text-white">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold mb-4">Support</h4>
+      <ul class="space-y-2 text-gray-400">
+        <li><a href="contact.html" class="hover:text-white">Contact Us</a></li>
+        <li><a href="#" class="hover:text-white">Help Center</a></li>
+        <li><a href="#" class="hover:text-white">Shipping Guide</a></li>
+        <li><a href="#" class="hover:text-white">Tax & Customs</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-bold mb-4">Newsletter</h4>
+      <div class="relative">
+        <input id="newsletter-email" type="email" placeholder="Your email" class="w-full bg-white/10 border border-gray-700 rounded-full px-4 py-2 text-white placeholder-gray-400">
+        <button id="newsletter-btn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#ffcc00] text-black px-4 py-1 rounded-full text-sm font-bold">Send</button>
+      </div>
+      <div id="newsletter-msg" class="text-green-400 text-sm mt-2 hidden"></div>
+    </div>
+  </div>
+  <div class="text-center text-gray-500 text-sm mt-12 pt-8 border-t border-gray-800">© 2025 CoreTransit Logistics. All rights reserved.</div>
+</footer>
 
-        // Back to top button
-        const backToTop = document.getElementById('back-to-top');
-        window.addEventListener('scroll', () => { if (window.scrollY > 500) backToTop.classList.add('visible'); else backToTop.classList.remove('visible'); });
-        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+<button id="back-to-top" class="back-to-top fixed bottom-6 right-6 w-12 h-12 bg-[#ffcc00] rounded-full shadow-lg flex items-center justify-center cursor-pointer z-50"><i class="fa-solid fa-arrow-up text-black"></i></button>
 
-        // Newsletter subscription (Supabase or mock)
-        const newsletterBtn = document.getElementById('newsletter-btn');
-        const newsletterEmail = document.getElementById('newsletter-email');
-        const newsletterMsg = document.getElementById('newsletter-msg');
-        if (newsletterBtn && newsletterEmail) {
-            newsletterBtn.addEventListener('click', async () => {
-                const email = newsletterEmail.value.trim();
-                if (!email || !/^\S+@\S+\.\S+$/.test(email)) { newsletterMsg.textContent = 'Please enter a valid email.'; newsletterMsg.classList.remove('hidden'); newsletterMsg.classList.add('text-red-400'); setTimeout(() => newsletterMsg.classList.add('hidden'), 3000); return; }
-                let success = false;
-                if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-                    try {
-                        const { error } = await supabaseClient.from('newsletter_subscribers').insert([{ email, subscribed_at: new Date() }]);
-                        if (!error) success = true;
-                    } catch (e) { console.warn(e); }
-                }
-                if (!success) { console.log('Mock subscription'); success = true; }
-                if (success) { newsletterEmail.value = ''; newsletterMsg.textContent = 'Subscribed successfully!'; newsletterMsg.classList.remove('hidden', 'text-red-400'); newsletterMsg.classList.add('text-green-400'); setTimeout(() => newsletterMsg.classList.add('hidden'), 3000); }
-                else { newsletterMsg.textContent = 'Subscription failed. Try again.'; newsletterMsg.classList.remove('hidden'); newsletterMsg.classList.add('text-red-400'); setTimeout(() => newsletterMsg.classList.add('hidden'), 3000); }
-            });
-        }
-    </script>
-    <script src="js/main.js"></script>
+<!-- ==================== SCRIPTS ==================== -->
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Initialize AOS
+  AOS.init({ duration: 800, once: true, offset: 100 });
+
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); document.body.classList.toggle('mobile-menu-open'); });
+    document.addEventListener('click', (e) => { if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) { mobileMenu.classList.add('hidden'); document.body.classList.remove('mobile-menu-open'); } });
+  }
+
+  // Back to top
+  const backBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => { if (window.scrollY > 500) backBtn.classList.add('visible'); else backBtn.classList.remove('visible'); });
+  backBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Newsletter subscription (Supabase or mock)
+  const newsletterBtn = document.getElementById('newsletter-btn');
+  const newsletterEmail = document.getElementById('newsletter-email');
+  const newsletterMsg = document.getElementById('newsletter-msg');
+  if (newsletterBtn && newsletterEmail) {
+    newsletterBtn.addEventListener('click', async () => {
+      const email = newsletterEmail.value.trim();
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+        newsletterMsg.textContent = 'Valid email required.';
+        newsletterMsg.classList.remove('hidden');
+        newsletterMsg.classList.add('text-red-400');
+        setTimeout(() => newsletterMsg.classList.add('hidden'), 3000);
+        return;
+      }
+      let success = false;
+      if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from('newsletter_subscribers').insert([{ email, subscribed_at: new Date() }]);
+          if (!error) success = true;
+        } catch (e) { console.warn(e); }
+      }
+      if (!success) { console.log('Mock subscription'); success = true; }
+      if (success) {
+        newsletterEmail.value = '';
+        newsletterMsg.textContent = 'Subscribed!';
+        newsletterMsg.classList.remove('hidden', 'text-red-400');
+        newsletterMsg.classList.add('text-green-400');
+        setTimeout(() => newsletterMsg.classList.add('hidden'), 3000);
+      } else {
+        newsletterMsg.textContent = 'Subscription failed.';
+        newsletterMsg.classList.remove('hidden');
+        newsletterMsg.classList.add('text-red-400');
+        setTimeout(() => newsletterMsg.classList.add('hidden'), 3000);
+      }
+    });
+  }
+</script>
 </body>
-
 </html>

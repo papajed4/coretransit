@@ -1,0 +1,267 @@
+/* ==========================================
+   CoreTransit Design System – DHL Inspired
+   Light, rounded, friendly, with yellow/red accents
+   ========================================== */
+
+/* ---------- CSS Variables (Tokens) ---------- */
+:root {
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f2f2f2;
+  --color-text: #000000;
+  --color-text-secondary: #666666;
+  --color-border: #f2f2f2;
+  --color-primary: #ffcc00;      /* DHL yellow */
+  --color-secondary: #d40511;    /* DHL red */
+  --color-link: #0000ee;
+  --color-accent-blue: #3860be;
+
+  /* Spacing (7px base) */
+  --space-1: 7px;
+  --space-2: 14px;
+  --space-3: 21px;
+  --space-4: 28px;
+  --space-5: 35px;
+  --space-6: 42px;
+  --space-8: 56px;
+
+  /* Border Radius */
+  --radius-button: 12px;
+  --radius-card: 20px;
+  --radius-subtle: 2px;
+
+  /* Shadows (chromatic, from DHL) */
+  --shadow-low: rgba(50, 50, 50, 0.5) 0px 1px 4px 0px;
+  --shadow-mid: rgb(128, 128, 128) 0px 0px 10px 0px;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Global Reset & Typography ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Buttons (from spec, improved) ---------- */
+.btn-primary {
+  background: var(--color-primary);
+  color: black;
+  border-radius: var(--radius-button);
+  padding: 12px 24px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary:hover {
+  background: #e6b800;
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: white;
+  border-radius: var(--radius-button);
+  padding: 12px 24px;
+  font-weight: 700;
+  transition: background 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.btn-secondary:hover {
+  background: #b0040e;
+}
+
+.btn-outline {
+  border: 1px solid var(--color-secondary);
+  background: transparent;
+  color: var(--color-secondary);
+  border-radius: var(--radius-button);
+  padding: 12px 24px;
+  font-weight: 700;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-link);
+  border-radius: var(--radius-button);
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+.btn-ghost:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Glass morphism (for hero, modals) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+}
+
+/* ---------- Status Badges (for tracking/admin) ---------- */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-transit { background: #dbeafe; color: #1e40af; }
+.status-outfordelivery { background: #e0e7ff; color: #3730a3; }
+.status-delivered { background: #d1fae5; color: #065f46; }
+
+/* ---------- Timeline Stepper (tracking page) ---------- */
+.timeline-step {
+  position: relative;
+  text-align: center;
+  flex: 1;
+}
+.step-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-bg-secondary);
+  border: 2px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: all 0.3s;
+}
+.timeline-step.completed .step-icon {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: white;
+}
+.timeline-step.active .step-icon {
+  background: white;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(255, 204, 0, 0.3);
+}
+.timeline-step p {
+  font-size: 12px;
+  margin-top: 12px;
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  .step-icon { width: 36px; height: 36px; }
+  .timeline-step p { font-size: 10px; margin-top: 8px; }
+}
+
+/* ---------- Stats Numbers (animated counters) ---------- */
+.stat-number {
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: var(--color-secondary);
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Form Elements ---------- */
+input, select, textarea {
+  border-radius: var(--radius-button);
+  border: 1px solid var(--color-border);
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(212, 5, 17, 0.1);
+}
+
+/* ---------- Navigation & Mobile Menu ---------- */
+#mobile-menu {
+  transition: all 0.3s;
+}
+.mobile-menu-open {
+  overflow: hidden;
+}
+
+/* Back to Top button */
+.back-to-top {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- Admin Dashboard Overrides ---------- */
+.admin-sidebar {
+  background: linear-gradient(180deg, var(--color-secondary) 0%, #a0040e 100%);
+}
+.admin-table-row:hover {
+  background: rgba(212, 5, 17, 0.05);
+}
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- Responsive Utilities ---------- */
+@media (max-width: 767px) {
+  .container-custom {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  .stat-number { font-size: 2rem; }
+}
+@media (min-width: 768px) {
+  h1 { font-size: 3.5rem; }
+  h2 { font-size: 2.75rem; }
+}
+@media (min-width: 1024px) {
+  h1 { font-size: 4.5rem; }
+  h2 { font-size: 3.5rem; }
+}

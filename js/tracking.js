@@ -1,209 +1,206 @@
 // ==========================================
-// CORETRANSIT TRACKING LOGIC
+// CORETRANSIT TRACKING – Robust & Error‑Free
 // ==========================================
 
-// Current tracking data
 let currentShipment = null;
 
-// Initialize tracking page
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('📍 Tracking page initialized');
-
-    // Initialize AOS
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100
-        });
-    }
-
-    // Set up tracking form
+    console.log('📍 Tracking page ready');
+    if (typeof AOS !== 'undefined') AOS.init({ duration: 800, once: true, offset: 100 });
     setupTrackingForm();
-
-    // Set up mobile menu
     setupMobileMenu();
-
-    // Set up back to top button
     setupBackToTop();
-
-    // Check for pre-filled tracking ID
     checkForPrefill();
 });
 
-// Set up tracking form submission
+// ---------- FORM SETUP ----------
 function setupTrackingForm() {
     const form = document.getElementById('tracking-form');
     if (!form) return;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        const trackingId = document.getElementById('tracking-id-input').value.trim().toUpperCase();
-
+        const input = document.getElementById('tracking-id-input');
+        const trackingId = input ? input.value.trim().toUpperCase() : '';
         if (!trackingId) {
             showTrackingError('Please enter a tracking number');
             return;
         }
-
         await trackShipment(trackingId);
     });
 
-    // Allow Enter key in input
     const input = document.getElementById('tracking-id-input');
     if (input) {
         input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                form.dispatchEvent(new Event('submit'));
-            }
+            if (e.key === 'Enter') form.dispatchEvent(new Event('submit'));
         });
     }
 }
 
-// Main tracking function
+// ---------- MAIN TRACKING FUNCTION ----------
 async function trackShipment(trackingId) {
-    const btnText = document.querySelector('#track-btn span');
+    const btn = document.getElementById('track-btn');
     const loader = document.getElementById('track-loader');
-    const btnIcon = document.querySelector('#track-btn i');
     const resultDiv = document.getElementById('track-result');
     const errorDiv = document.getElementById('track-error');
 
-    // Show loading state
-    btnText.style.opacity = '0.5';
-    if (btnIcon) btnIcon.style.display = 'none';
-    if (loader) loader.style.display = 'block';
-    resultDiv?.classList.add('hidden');
-    errorDiv?.classList.add('hidden');
+    // Disable button & show loader
+    if (btn) {
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+    }
+    if (loader) loader.style.display = 'inline-block';
+    if (resultDiv) resultDiv.classList.add('hidden');
+    if (errorDiv) errorDiv.classList.add('hidden');
 
     try {
         let shipmentData = null;
 
-        // Try Supabase first
-        if (isSupabaseAvailable() && supabaseClient) {
-            const { data, error } = await supabaseClient
-                .from('shipments')
-                .select('*')
-                .eq('tracking_id', trackingId)
-                .single();
-
-            if (error) {
-                console.log('Supabase error:', error.message);
-                // Fall back to mock data
+        // Try Supabase only if available AND not forced to mock
+        if (typeof isSupabaseAvailable === 'function' && isSupabaseAvailable() && typeof supabaseClient !== 'undefined' && supabaseClient) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('shipments')
+                    .select('*')
+                    .eq('tracking_id', trackingId)
+                    .single();
+                if (!error && data) shipmentData = data;
+                else shipmentData = getMockShipment(trackingId);
+            } catch (supabaseErr) {
+                console.warn('Supabase error, using mock:', supabaseErr.message);
                 shipmentData = getMockShipment(trackingId);
-            } else {
-                shipmentData = data;
             }
         } else {
-            // Use mock data with simulated delay
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Mock only – simulate network delay for realism
+            await new Promise(resolve => setTimeout(resolve, 600));
             shipmentData = getMockShipment(trackingId);
         }
 
         if (shipmentData) {
             currentShipment = shipmentData;
             displayTrackingResult(shipmentData);
-
-            // Save to recent searches (localStorage)
             saveRecentSearch(trackingId, shipmentData.status);
-
-            // Update URL with tracking ID (optional)
             updateUrlWithTracking(trackingId);
         } else {
-            showTrackingError('Tracking ID not found');
+            showTrackingError(`Tracking ID "${trackingId}" not found. Please check and try again.`);
         }
-
     } catch (err) {
         console.error('Tracking error:', err);
-        showTrackingError('An error occurred. Please try again.');
+        showTrackingError('Unable to track shipment. Please try again later.');
     } finally {
-        // Restore button state
+        if (btn) {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
         if (loader) loader.style.display = 'none';
-        if (btnIcon) btnIcon.style.display = 'inline-block';
-        btnText.style.opacity = '1';
     }
 }
 
-// Get mock shipment data
+// ---------- MOCK DATA (full demo set) ----------
 function getMockShipment(trackingId) {
-    // Check if we have this ID in our mock database
-    if (MOCK_SHIPMENTS && MOCK_SHIPMENTS[trackingId]) {
-        return MOCK_SHIPMENTS[trackingId];
-    }
-
-    // Generate a generic mock for demo purposes
-    const mockIds = ['COR-84729', 'COR-19384', 'COR-56192', 'COR-72941'];
-    if (mockIds.includes(trackingId) || trackingId.startsWith('COR-')) {
+    // Predefined mock data for the four demo IDs
+    const mockDb = {
+        'COR-84729': {
+            tracking_id: 'COR-84729',
+            status: 'In Transit',
+            location: 'Dubai Logistics Hub, UAE',
+            sender_name: 'GlobalTech Industries',
+            receiver_name: 'Acme Corp Ltd.',
+            updated_at: new Date().toLocaleString(),
+            progress: 60
+        },
+        'COR-19384': {
+            tracking_id: 'COR-19384',
+            status: 'Delivered',
+            location: 'New York Distribution Center, USA',
+            sender_name: 'Samsung Electronics',
+            receiver_name: 'Retail Partners Inc.',
+            updated_at: new Date(Date.now() - 86400000).toLocaleString(),
+            progress: 100
+        },
+        'COR-56192': {
+            tracking_id: 'COR-56192',
+            status: 'Pending',
+            location: 'Amsterdam Warehouse, Netherlands',
+            sender_name: 'Philips Healthcare',
+            receiver_name: 'MediCare Solutions',
+            updated_at: new Date().toLocaleString(),
+            progress: 10
+        },
+        'COR-72941': {
+            tracking_id: 'COR-72941',
+            status: 'Out for Delivery',
+            location: 'London Distribution Center, UK',
+            sender_name: 'ASICS Corporation',
+            receiver_name: 'Sports Direct UK',
+            updated_at: new Date().toLocaleString(),
+            progress: 85
+        }
+    };
+    if (mockDb[trackingId]) return mockDb[trackingId];
+    // Any other COR-***** gets a random realistic status
+    if (trackingId.startsWith('COR-')) {
+        const statuses = ['Pending', 'In Transit', 'Out for Delivery', 'Delivered'];
+        const locations = ['Los Angeles Hub, USA', 'Rotterdam Port, Netherlands', 'Singapore Logistics Centre', 'Sydney Warehouse, Australia'];
+        const senders = ['Techtronics Inc.', 'Global Pharma Ltd.', 'AutoParts Co.', 'Fashion Retail Group'];
+        const receivers = ['BestBuy Distribution', 'Walmart Logistics', 'Amazon Fulfillment', 'Target Supply Chain'];
         return {
             tracking_id: trackingId,
-            status: ['In Transit', 'Pending', 'Out for Delivery', 'Delivered'][Math.floor(Math.random() * 4)],
-            location: ['Dubai Logistics Hub, UAE', 'Singapore Port, Singapore', 'Rotterdam Warehouse, Netherlands', 'Los Angeles Distribution, USA'][Math.floor(Math.random() * 4)],
-            sender_name: ['GlobalTech Industries', 'Samsung Electronics', 'Philips Healthcare', 'ASICS Corporation'][Math.floor(Math.random() * 4)],
-            receiver_name: ['Acme Corp Ltd.', 'Retail Partners Inc.', 'MediCare Solutions', 'Sports Direct UK'][Math.floor(Math.random() * 4)],
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+            location: locations[Math.floor(Math.random() * locations.length)],
+            sender_name: senders[Math.floor(Math.random() * senders.length)],
+            receiver_name: receivers[Math.floor(Math.random() * receivers.length)],
             updated_at: new Date().toLocaleString(),
             progress: Math.floor(Math.random() * 100)
         };
     }
-
-    return null;
+    return null; // No match
 }
 
-// Display tracking result
+// ---------- DISPLAY RESULTS (safe DOM updates) ----------
 function displayTrackingResult(shipment) {
     const resultDiv = document.getElementById('track-result');
     if (!resultDiv) return;
 
-    // Update tracking ID
-    const idElement = document.getElementById('res-id');
-    if (idElement) idElement.textContent = shipment.tracking_id;
+    // Tracking ID
+    const idElem = document.getElementById('res-id');
+    if (idElem) idElem.textContent = shipment.tracking_id;
 
-    // Update location
-    const locationElement = document.getElementById('res-location');
-    if (locationElement) locationElement.textContent = shipment.location || 'Location unavailable';
+    // Location
+    const locElem = document.getElementById('res-location');
+    if (locElem) locElem.textContent = shipment.location || 'Location unknown';
 
-    // Update sender
-    const senderElement = document.getElementById('res-sender');
-    if (senderElement) senderElement.textContent = shipment.sender_name || 'N/A';
+    // Sender / Receiver
+    const senderElem = document.getElementById('res-sender');
+    if (senderElem) senderElem.textContent = shipment.sender_name || 'N/A';
+    const receiverElem = document.getElementById('res-receiver');
+    if (receiverElem) receiverElem.textContent = shipment.receiver_name || 'N/A';
 
-    // Update receiver
-    const receiverElement = document.getElementById('res-receiver');
-    if (receiverElement) receiverElement.textContent = shipment.receiver_name || 'N/A';
+    // Timestamp
+    const updatedElem = document.getElementById('res-updated');
+    if (updatedElem) updatedElem.textContent = shipment.updated_at || new Date().toLocaleString();
 
-    // Update timestamp
-    const updatedElement = document.getElementById('res-updated');
-    if (updatedElement) {
-        updatedElement.textContent = shipment.updated_at || new Date().toLocaleString();
-    }
-
-    // Update status badge
+    // Status badge & timeline
     updateStatusBadge(shipment.status);
-
-    // Update timeline and progress
     updateTimeline(shipment.status, shipment.progress || 50);
 
-    // Show result
     resultDiv.classList.remove('hidden');
-
-    // Scroll to result
-    setTimeout(() => {
-        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 100);
-
-    // Refresh AOS for new elements
-    if (typeof AOS !== 'undefined') {
-        setTimeout(() => AOS.refresh(), 100);
-    }
+    setTimeout(() => resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    if (typeof AOS !== 'undefined') setTimeout(() => AOS.refresh(), 150);
 }
 
-// Update status badge
 function updateStatusBadge(status) {
     const badge = document.getElementById('res-status-badge');
     if (!badge) return;
 
-    const statusLower = status.toLowerCase();
-    const dotColor = statusLower.includes('delivered') ? 'bg-green-500' :
-        statusLower.includes('transit') ? 'bg-blue-500' :
-            statusLower.includes('out for delivery') ? 'bg-purple-500' : 'bg-orange-500';
+    const s = status.toLowerCase();
+    let bgClass = 'bg-orange-100 text-orange-700';
+    let dotColor = 'bg-orange-500';
+    if (s.includes('delivered')) { bgClass = 'bg-green-100 text-green-700'; dotColor = 'bg-green-500'; }
+    else if (s.includes('transit')) { bgClass = 'bg-blue-100 text-blue-700'; dotColor = 'bg-blue-500'; }
+    else if (s.includes('out for delivery')) { bgClass = 'bg-purple-100 text-purple-700'; dotColor = 'bg-purple-500'; }
 
+    badge.className = `inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold ${bgClass}`;
     badge.innerHTML = `
         <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full ${dotColor} opacity-75"></span>
@@ -211,233 +208,144 @@ function updateStatusBadge(status) {
         </span>
         ${status}
     `;
-
-    // Reset classes
-    badge.className = 'inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold';
-
-    // Add status-specific classes
-    if (statusLower.includes('delivered')) {
-        badge.classList.add('bg-green-100', 'text-green-700');
-    } else if (statusLower.includes('transit')) {
-        badge.classList.add('bg-blue-100', 'text-blue-700');
-    } else if (statusLower.includes('out for delivery')) {
-        badge.classList.add('bg-purple-100', 'text-purple-700');
-    } else {
-        badge.classList.add('bg-orange-100', 'text-orange-700');
-    }
 }
 
-// Update timeline stepper
 function updateTimeline(status, progressPercent) {
     const progressBar = document.getElementById('res-progress');
-    if (progressBar) {
-        setTimeout(() => {
-            progressBar.style.width = `${progressPercent}%`;
-        }, 100);
-    }
+    if (progressBar) setTimeout(() => progressBar.style.width = `${progressPercent}%`, 50);
 
     const steps = document.querySelectorAll('.timeline-step');
-    if (steps.length === 0) return;
+    if (!steps.length) return;
 
-    const statusLower = status.toLowerCase();
-    let activeStepIndex = 2; // Default to In Transit
+    const s = status.toLowerCase();
+    let activeIndex = 2; // default In Transit
+    if (s.includes('pending')) activeIndex = 0;
+    else if (s.includes('processing')) activeIndex = 1;
+    else if (s.includes('transit')) activeIndex = 2;
+    else if (s.includes('out for delivery')) activeIndex = 3;
+    else if (s.includes('delivered')) activeIndex = 4;
 
-    if (statusLower.includes('pending')) activeStepIndex = 0;
-    else if (statusLower.includes('processing')) activeStepIndex = 1;
-    else if (statusLower.includes('transit')) activeStepIndex = 2;
-    else if (statusLower.includes('out for delivery')) activeStepIndex = 3;
-    else if (statusLower.includes('delivered')) activeStepIndex = 4;
-
-    steps.forEach((step, index) => {
+    steps.forEach((step, idx) => {
         step.classList.remove('completed', 'active');
-
         const icon = step.querySelector('.step-icon');
         const label = step.querySelector('p');
-
-        if (index < activeStepIndex) {
-            // Completed step
+        if (idx < activeIndex) {
             step.classList.add('completed');
-            if (icon) {
-                icon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
-                icon.classList.add('bg-accent', 'text-white', 'border-accent');
-                icon.classList.remove('bg-white', 'border-accent', 'text-accent', 'shadow-[0_0_0_4px_rgba(249,115,22,0.2)]');
-            }
-            if (label) {
-                label.classList.add('text-primary');
-                label.classList.remove('text-accent', 'text-gray-400');
-            }
-        } else if (index === activeStepIndex) {
-            // Active step
+            if (icon) { icon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>'; icon.classList.add('bg-[#d40511]', 'text-white', 'border-[#d40511]'); icon.classList.remove('bg-white', 'border-[#d40511]', 'text-[#d40511]'); }
+            if (label) label.classList.add('text-black');
+        } else if (idx === activeIndex) {
             step.classList.add('active');
-            if (icon) {
-                icon.innerHTML = getStepIcon(index);
-                icon.classList.add('bg-white', 'border-accent', 'text-accent', 'shadow-[0_0_0_4px_rgba(249,115,22,0.2)]');
-                icon.classList.remove('bg-accent', 'text-white');
-            }
-            if (label) {
-                label.classList.add('text-accent');
-                label.classList.remove('text-primary', 'text-gray-400');
-            }
+            if (icon) { icon.innerHTML = getStepIcon(idx); icon.classList.add('bg-white', 'border-[#d40511]', 'text-[#d40511]'); icon.classList.remove('bg-[#d40511]', 'text-white'); }
+            if (label) label.classList.add('text-[#d40511]');
         } else {
-            // Future step
-            if (icon) {
-                icon.innerHTML = '<i class="fa-regular fa-circle text-gray-400"></i>';
-                icon.classList.add('bg-gray-100', 'border-gray-200');
-                icon.classList.remove('bg-accent', 'text-white', 'border-accent', 'shadow-[0_0_0_4px_rgba(249,115,22,0.2)]');
-            }
-            if (label) {
-                label.classList.add('text-gray-400');
-                label.classList.remove('text-primary', 'text-accent');
-            }
+            if (icon) { icon.innerHTML = '<i class="fa-regular fa-circle text-gray-400"></i>'; icon.classList.add('bg-gray-100', 'border-gray-200'); icon.classList.remove('bg-[#d40511]', 'text-white', 'border-[#d40511]'); }
+            if (label) label.classList.add('text-gray-400');
         }
     });
 }
 
-// Get icon for active step
 function getStepIcon(stepIndex) {
     const icons = ['fa-clipboard-list', 'fa-gear', 'fa-truck-fast', 'fa-box', 'fa-circle-check'];
     return `<i class="fa-solid ${icons[stepIndex] || 'fa-truck'}"></i>`;
 }
 
-// Show tracking error
+// ---------- ERROR DISPLAY ----------
 function showTrackingError(message) {
     const errorDiv = document.getElementById('track-error');
-    if (!errorDiv) return;
-
-    const messageElement = errorDiv.querySelector('p');
-    if (messageElement) {
-        messageElement.textContent = message;
+    if (errorDiv) {
+        const msgElem = errorDiv.querySelector('p');
+        if (msgElem) msgElem.textContent = message;
+        errorDiv.classList.remove('hidden');
+        setTimeout(() => errorDiv.classList.add('hidden'), 5000);
+    } else {
+        alert(message); // fallback
     }
-
-    errorDiv.classList.remove('hidden');
-
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-        errorDiv.classList.add('hidden');
-    }, 5000);
 }
 
-// Fill demo tracking ID
+// ---------- UTILITIES ----------
 function fillDemoId(id) {
     const input = document.getElementById('tracking-id-input');
     if (input) {
         input.value = id;
-        // Auto submit
-        document.getElementById('tracking-form')?.dispatchEvent(new Event('submit'));
+        const form = document.getElementById('tracking-form');
+        if (form) form.dispatchEvent(new Event('submit'));
     }
 }
 
-// Copy tracking link to clipboard
 function copyTrackingLink() {
     if (!currentShipment) return;
-
     const url = `${window.location.origin}${window.location.pathname}?tracking=${currentShipment.tracking_id}`;
-    copyToClipboard(url);
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => alert('Tracking link copied!')).catch(() => alert('Failed to copy'));
+    } else {
+        alert('Press Ctrl+C to copy: ' + url);
+    }
 }
 
-// Save to recent searches
 function saveRecentSearch(trackingId, status) {
     try {
         let recent = JSON.parse(localStorage.getItem('recent_tracking') || '[]');
-
-        // Add new search to beginning
-        recent.unshift({
-            id: trackingId,
-            status: status,
-            timestamp: new Date().toISOString()
-        });
-
-        // Keep only last 5 searches
+        recent.unshift({ id: trackingId, status, timestamp: new Date().toISOString() });
         recent = recent.slice(0, 5);
-
         localStorage.setItem('recent_tracking', JSON.stringify(recent));
-    } catch (e) {
-        console.warn('Could not save recent search:', e);
-    }
+    } catch (e) { /* ignore */ }
 }
 
-// Update URL with tracking ID
 function updateUrlWithTracking(trackingId) {
     if (history.pushState) {
         const newUrl = `${window.location.pathname}?tracking=${trackingId}`;
-        window.history.pushState({ trackingId }, '', newUrl);
+        history.pushState({ trackingId }, '', newUrl);
     }
 }
 
-// Check for pre-filled tracking ID
 function checkForPrefill() {
-    // Check URL params first
     const urlParams = new URLSearchParams(window.location.search);
-    const urlTrackingId = urlParams.get('tracking');
-
-    if (urlTrackingId) {
+    let trackingId = urlParams.get('tracking');
+    if (trackingId) {
         const input = document.getElementById('tracking-id-input');
-        if (input) {
-            input.value = urlTrackingId;
-            // Auto-submit
-            setTimeout(() => {
-                document.getElementById('tracking-form')?.dispatchEvent(new Event('submit'));
-            }, 300);
-        }
+        if (input) input.value = trackingId;
+        setTimeout(() => {
+            const form = document.getElementById('tracking-form');
+            if (form) form.dispatchEvent(new Event('submit'));
+        }, 300);
         return;
     }
-
-    // Check session storage (from homepage)
-    const prefillId = sessionStorage.getItem('prefill_tracking_id');
-    if (prefillId) {
+    trackingId = sessionStorage.getItem('prefill_tracking_id');
+    if (trackingId) {
         const input = document.getElementById('tracking-id-input');
-        if (input) {
-            input.value = prefillId;
-            sessionStorage.removeItem('prefill_tracking_id');
-
-            // Auto-submit
-            setTimeout(() => {
-                document.getElementById('tracking-form')?.dispatchEvent(new Event('submit'));
-            }, 300);
-        }
+        if (input) input.value = trackingId;
+        sessionStorage.removeItem('prefill_tracking_id');
+        setTimeout(() => {
+            const form = document.getElementById('tracking-form');
+            if (form) form.dispatchEvent(new Event('submit'));
+        }, 300);
     }
 }
 
-// Mobile menu setup
+// ---------- MOBILE MENU & BACK TO TOP ----------
 function setupMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-
     if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Close when clicking outside
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
         document.addEventListener('click', (e) => {
-            if (!mobileMenu.classList.contains('hidden') &&
-                !mobileMenu.contains(e.target) &&
-                !menuBtn.contains(e.target)) {
+            if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target))
                 mobileMenu.classList.add('hidden');
-            }
         });
     }
 }
 
-// Back to top button setup
 function setupBackToTop() {
     const btn = document.getElementById('back-to-top');
     if (!btn) return;
-
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
-            btn.classList.add('visible');
-        } else {
-            btn.classList.remove('visible');
-        }
+        if (window.scrollY > 500) btn.classList.add('visible');
+        else btn.classList.remove('visible');
     });
-
-    btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
-// Export for global use
+// Expose functions globally
 window.trackShipment = trackShipment;
 window.fillDemoId = fillDemoId;
 window.copyTrackingLink = copyTrackingLink;
